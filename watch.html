@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Watch and download films free on Osama Movies.">
+  <title>Watch | Osama Movies</title>
+
+  <style>
+    :root {
+      --background: #080b14;
+      --surface: #121827;
+      --text: #f5f7ff;
+      --muted: #a9b3c9;
+      --blue: #2388ff;
+      --blue-dark: #0869d5;
+      --cyan: #30d5ff;
+      --green: #27c281;
+      --green-dark: #1ea36b;
+      --border: #29344a;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Arial, sans-serif; background: var(--background); color: var(--text); margin: 0; padding: 0; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* NAVBAR */
+    .navbar { position: sticky; top: 0; z-index: 50; min-height: 74px; display: flex; justify-content: space-between; align-items: center; padding: 16px 5%; background: rgba(8,11,20,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+    .logo img { height: 45px; width: auto; }
+    nav { display: flex; gap: 22px; }
+    nav a { color: var(--muted); font-size: 0.95rem; font-weight: 600; }
+    nav a:hover { color: var(--blue); }
+
+    /* WATCH PAGE */
+    .watch-page { max-width: 1000px; margin: auto; padding: 40px 5% 60px; }
+    .watch-header { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
+    .watch-details h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 8px; }
+    .film-meta { color: var(--cyan); font-weight: 700; font-size: 0.95rem; margin-bottom: 16px; }
+    .film-description { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 24px; }
+    
+    .watch-actions { display: flex; gap: 12px; align-items: center; }
+    .download-link { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: var(--radius-sm); background: var(--green); color: #fff; font-weight: 700; }
+    .download-link:hover { background: var(--green-dark); }
+    .secondary-link { color: var(--muted); font-size: 0.9rem; font-weight: 600; padding: 8px 4px; }
+    .secondary-link:hover { color: var(--blue); }
+
+    /* PLAYER SECTION */
+    .player-section { margin-bottom: 50px; background: linear-gradient(180deg, var(--surface) 0%, var(--background) 100%); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+
+    /* ✅ HANO NI HO HINDUTSE: Twagabanyije div kugira ngo ibe Fullscreen nziza */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* ✅ Iyi ni Logo izaguma kuri video */
+    .video-watermark {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      height: 40px;
+      z-index: 10;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    /* ✅ Iyi ni Buto yacu ya Fullscreen (Kugira ngo idasimbuze iya browser) */
+    .fs-btn {
+      position: absolute;
+      bottom: 50px;
+      right: 15px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      cursor: pointer;
+      z-index: 20;
+      font-size: 1.2rem;
+      transition: background 0.2s;
+    }
+
+    .fs-btn:hover {
+      background: var(--blue);
+    }
+
+    /* Iyo iri muri Fullscreen, iri div irafata ecran yose */
+    .video-wrapper:fullscreen {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      border: none;
+      background: #000;
+    }
+
+    .video-wrapper:fullscreen video {
+      height: 100%;
+    }
+    
+    /* FOOTER */
+    footer { text-align: center; padding: 40px 7%; background: #060810; border-top: 1px solid var(--border); margin-top: 40px; }
+    footer .logo img { height: 60px; margin: 0 auto 10px auto; }
+    footer p { color: var(--muted); font-size: 0.9rem; }
+
+    
+/* OSAMA MOVIES FOOTER */
+
+.main-footer {
+    background: #061b42;
+    color: white;
+    padding: 50px 7% 15px;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 35px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-section h3 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #1685ff;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.footer-logo {
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.footer-logo span {
+    color: #1685ff;
+}
+
+.footer-section p {
+    color: #c5d4eb;
+    line-height: 1.7;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 12px;
+}
+
+.footer-section a {
+    color: #c5d4eb;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-section a:hover {
+    color: #1685ff;
+    padding-left: 5px;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #29466e;
+    margin-top: 40px;
+    padding-top: 20px;
+    text-align: center;
+    color: #c5d4eb;
+    font-size: 14px;
+}
+
+.footer-bottom strong {
+    color: #1685ff;
+}
+
+/* Mobile responsive */
+
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .main-footer {
+        padding: 35px 7% 15px;
+    }
+}
+
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="logo" href="index.html">
+      <img src="logo.png" alt="Osama Movies">
+    </a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="index.html#films">Films</a>
+      <a href="cast.html">Cast & Crew</a>
+    </nav>
+  </header>
+
+  <main class="watch-page">
+    <section class="watch-header">
+      <div class="watch-details">
+        <p class="eyebrow" style="color:var(--cyan); font-size:0.75rem; font-weight:800; letter-spacing:3px; margin-bottom:8px; text-transform:uppercase;">NOW PLAYING</p>
+        <h1 id="filmTitle">Loading film...</h1>
+        <p id="filmMeta" class="film-meta">—</p>
+        <p id="filmDescription" class="film-description"></p>
+
+        <div class="watch-actions">
+          <a id="downloadBtn" class="download-link" href="#" download hidden>⬇ Download Film</a>
+          <a class="secondary-link" href="index.html#films">← Back to films</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="player-section">
+      <p id="playerMessage" style="color:var(--muted); margin-bottom:10px;">Loading player...</p>
+
+      <!-- ✅ TWAKUYEHO IYI DIV (Yari ifite Logo nini) TUSHIRAMO IYI NSHYA IFITE CUSTOM FULLSCREEN -->
+      <div id="videoWrapper" class="video-wrapper">
+        <img src="logo.png" alt="Watermark" class="video-watermark">
+        <div style="padding: 20px; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+           <p style="color:var(--muted);">Preparing your film...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <footer class="main-footer">
+    <div class="footer-container">
+
+      <!-- Logo and description -->
+      <div class="footer-section">
+        <h2 class="footer-logo">
+          OSAMA <span>MOVIES</span>
+        </h2>
+        <p>
+          Your destination for discovering movies.
+          Search films and enjoy your favorite entertainment.
+        </p>
+      </div>
+
+      <!-- Quick links -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#movies">Movies</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Categories -->
+      <div class="footer-section">
+        <h3>Categories</h3>
+        <ul>
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Comedy</a></li>
+          <li><a href="#">Drama</a></li>
+          <li><a href="#">Adventure</a></li>
+        </ul>
+      </div>
+
+      <!-- Social media -->
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">Instagram</a>
+          <a href="#" target="_blank">YouTube</a>
+          <a href="#" target="_blank">TikTok</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; <span id="yearNow"></span> OSAMA MOVIES. All Rights Reserved.</p>
+      
+    </div>
+  </footer>
+
+  <script>
+    const DB_NAME = "osama_movies_db";
+    const DB_VERSION = 2;
+    const STORE = "videos";
+    const POSTER_STORE = "posters";
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
+          if (!db.objectStoreNames.contains(POSTER_STORE)) db.createObjectStore(POSTER_STORE);
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function getBlob(store, id) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(store, "readonly");
+        const req = tx.objectStore(store).get(id);
+        req.onsuccess = () => res(req.result || null);
+        req.onerror = () => rej(req.error);
+      });
+    }
+
+    const getVideoBlob  = (id) => getBlob(STORE, id);
+    const getPosterBlob = (id) => getBlob(POSTER_STORE, id);
+
+    const FILMS_KEY = "osama_free_films";
+    const filmTitleEl    = document.getElementById("filmTitle");
+    const filmMetaEl     = document.getElementById("filmMeta");
+    const filmDescEl     = document.getElementById("filmDescription");
+    const downloadBtn    = document.getElementById("downloadBtn");
+    const videoWrapper   = document.getElementById("videoWrapper");
+    const playerMessage  = document.getElementById("playerMessage");
+
+    document.getElementById("yearNow").textContent = new Date().getFullYear();
+
+    const DEMO_FILMS = [
+      {
+        id: "free-001", title: "Big Buck Bunny", year: "2008",
+        poster: "https://peach.blender.org/wp-content/uploads/title_anouncement.jpg",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        description: "A giant rabbit deals with three bullying rodents. A Blender Foundation open movie."
+      }
+    ];
+
+    function loadFilms() {
+      try {
+        const raw = localStorage.getItem(FILMS_KEY);
+        if (!raw) {
+          localStorage.setItem(FILMS_KEY, JSON.stringify(DEMO_FILMS));
+          return [...DEMO_FILMS];
+        }
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [...DEMO_FILMS];
+      }
+    }
+
+    const FREE_FILMS = loadFilms();
+
+    function getFilmIdFromURL() {
+      return new URLSearchParams(window.location.search).get("id");
+    }
+    function slug(text) {
+      return String(text || "film").replace(/\s+/g, "_").replace(/[^\w\-]/g, "");
+    }
+
+    async function resolvePoster(film) {
+      if (film.hasLocalPoster) {
+        try {
+          const blob = await getPosterBlob(film.id);
+          if (blob) return URL.createObjectURL(blob);
+        } catch {}
+      }
+      return film.poster || "";
+    }
+
+    /* ============================================================
+       PLAYER LOGIC (Custom Fullscreen)
+       ============================================================ */
+    async function mountPlayer(videoUrl, posterUrl) {
+      
+      // ✅ 1. Siba ibiri muri wrapper mbere
+      videoWrapper.innerHTML = ""; 
+      
+      // ✅ 2. Shyiramo Logo
+      const watermark = document.createElement("img");
+      watermark.src = "logo.png"; 
+      watermark.className = "video-watermark";
+      videoWrapper.appendChild(watermark);
+
+      // ✅ 3. Shyiramo Video (Nta controls za default)
+      const video = document.createElement("video");
+      video.controls = true;
+      video.preload = "auto"; 
+      video.playsInline = true;
+      video.src = videoUrl;
+      if (posterUrl) video.poster = posterUrl;
+      videoWrapper.appendChild(video);
+
+      // ✅ 4. Shyiramo Buto yacu ya Fullscreen (Kugira ngo tujye muri Fullscreen kuri "wrapper" aho kuri "video")
+      const fsBtn = document.createElement("button");
+      fsBtn.className = "fs-btn";
+      fsBtn.innerHTML = "⛶"; // Ikimenyetso cya fullscreen
+      videoWrapper.appendChild(fsBtn);
+
+      fsBtn.addEventListener("click", () => {
+        if (!document.fullscreenElement) {
+          videoWrapper.requestFullscreen(); // ✅ Ifata wrapper (video na logo)
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      // ✅ 5. Hisha message
+      playerMessage.textContent = "Click Play to start.";
+    }
+
+    async function loadFilm() {
+      const id = getFilmIdFromURL();
+      
+      if (!id) {
+         playerMessage.textContent = "No Film ID provided.";
+         return;
+      }
+
+      const film = FREE_FILMS.find(f => f.id === id);
+
+      if (!film) {
+        filmTitleEl.textContent = "Film not found";
+        filmMetaEl.textContent = "";
+        filmDescEl.textContent = "This film may have been removed, or the link is incorrect.";
+        playerMessage.textContent = "Nothing to play.";
+        videoWrapper.innerHTML = `<div style="padding:20px; text-align:center;">Film not found.</div>`;
+        downloadBtn.hidden = true;
+        return;
+      }
+
+      document.title = `${film.title} | Osama Movies`;
+      filmTitleEl.textContent = film.title;
+      filmMetaEl.textContent = `Year: ${film.year || "Unknown"} · ${film.category || "Movie"}`;
+      filmDescEl.textContent = film.description || "";
+
+      const posterSrc = await resolvePoster(film);
+
+      if (film.videoUrl) {
+        if (film.videoUrl.startsWith("local:") || film.isLocal) {
+          try {
+            const blob = await getVideoBlob(film.id);
+            if (!blob) {
+              playerMessage.textContent = "Uploaded video not found in this browser.";
+              return;
+            }
+            const url = URL.createObjectURL(blob);
+            downloadBtn.href = url;
+            downloadBtn.setAttribute("download", `${slug(film.title)}.mp4`);
+            downloadBtn.hidden = false;
+            mountPlayer(url, posterSrc); 
+          } catch (err) {
+            console.error(err);
+            playerMessage.textContent = "Could not load the uploaded video.";
+          }
+        } else {
+          downloadBtn.href = film.videoUrl;
+          downloadBtn.setAttribute("download", `${slug(film.title)}.mp4`);
+          downloadBtn.hidden = false;
+          mountPlayer(film.videoUrl, posterSrc); 
+        }
+      } else {
+        downloadBtn.hidden = true;
+        playerMessage.textContent = "No video source available for this film.";
+      }
+    }
+
+    loadFilm();
+  </script>
+</body>
+</html>

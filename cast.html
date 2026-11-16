@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cast & Crew | Osama Movies</title>
+  <style>
+    :root {
+      --background: #080b14;
+      --surface: #121827;
+      --surface-light: #1b2437;
+      --text: #f5f7ff;
+      --muted: #a9b3c9;
+      --blue: #2388ff;
+      --blue-dark: #0869d5;
+      --border: #29344a;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+    body { font-family: "Segoe UI", Arial, sans-serif; background: var(--background); color: var(--text); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    
+    .navbar { display: flex; justify-content: space-between; padding: 15px 4%; background: var(--surface); border-bottom: 1px solid var(--border); align-items: center; }
+    
+    /* Logo muri Navbar */
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .logo img { height: 60px; width: auto; transition: transform 0.2s ease; }
+    .logo img:hover { transform: scale(1.05); }
+
+    .navbar nav { display: flex; gap: 20px; align-items: center; }
+    .navbar nav a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+    .navbar nav a:hover { color: var(--blue); }
+    
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 4%; flex: 1; width: 100%; box-sizing: border-box; }
+    h1 { font-size: 2rem; margin-bottom: 20px; }
+    
+    .cast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+    
+    .cast-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; transition: transform 0.2s, border-color 0.2s; }
+    .cast-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+    
+    .cast-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+    .actor-link { display: flex; align-items: center; gap: 15px; text-decoration: none; width: 100%; }
+    .actor-link:hover h3 { color: var(--blue-dark); }
+    
+    .actor-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--surface-light); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; overflow: hidden; flex-shrink: 0; transition: border-color 0.2s; }
+    .actor-link:hover .actor-avatar { border-color: var(--blue); }
+    .actor-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .cast-card h3 { color: var(--blue); margin: 0; font-size: 1.4rem; transition: color 0.2s; }
+    .cast-card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6; }
+    
+    .film-list { list-style: none; padding: 0; border-top: 1px solid var(--border); padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+    .film-item { display: flex; align-items: center; gap: 15px; background: var(--surface-light); padding: 10px; border-radius: var(--radius-sm); text-decoration: none; transition: background 0.2s; }
+    .film-item:hover { background: var(--border); }
+    .film-poster-small { width: 45px; height: 65px; border-radius: 6px; object-fit: cover; background: var(--background); flex-shrink: 0; }
+    .film-info-small { display: flex; flex-direction: column; }
+    .film-title { color: white; font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+    .film-year { color: var(--muted); font-size: 0.8rem; }
+    .film-watch-btn { margin-left: auto; color: var(--blue); font-size: 0.8rem; font-weight: bold; }
+
+    /* ============================================================
+       ✅ FOOTER NSHYA (Dore CSS wanyeretse)
+       ============================================================ */
+    .main-footer {
+        background: #061b42;
+        color: white;
+        padding: 50px 7% 15px;
+        font-family: Arial, sans-serif;
+        margin-top: auto;
+    }
+
+    .footer-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 35px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .footer-section h3 {
+        color: #ffffff;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #1685ff;
+        display: inline-block;
+        padding-bottom: 8px;
+    }
+
+    .footer-logo {
+        color: #ffffff;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .footer-logo span {
+        color: #1685ff;
+    }
+
+    .footer-section p {
+        color: #c5d4eb;
+        line-height: 1.7;
+    }
+
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-section ul li {
+        margin-bottom: 12px;
+    }
+
+    .footer-section a {
+        color: #c5d4eb;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .footer-section a:hover {
+        color: #1685ff;
+        padding-left: 5px;
+    }
+
+    .social-links {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid #29466e;
+        margin-top: 40px;
+        padding-top: 20px;
+        text-align: center;
+        color: #c5d4eb;
+        font-size: 14px;
+    }
+
+    .footer-bottom strong {
+        color: #1685ff;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .footer-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .footer-container {
+            grid-template-columns: 1fr;
+        }
+
+        .main-footer {
+            padding: 35px 7% 15px;
+        }
+    }
+
+    /* Mobile ya Navbar na Cast */
+    @media (max-width: 900px) {
+      .logo img { height: 45px; }
+      .navbar { flex-wrap: wrap; justify-content: center; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="logo" href="index.html">
+      <img src="logo.png" alt="Osama Movies Logo">
+    </a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cast.html">Cast & Crew</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Cast & Crew</h1>
+    <p style="color: var(--muted); margin-bottom: 30px;">Discover the actors behind your favorite films.</p>
+    
+    <div id="castGrid" class="cast-grid"></div>
+  </div>
+
+  <!-- ============================================================
+       ✅ FOOTER (Nk'uko wayanditse)
+       ============================================================ -->
+  <footer class="main-footer">
+    <div class="footer-container">
+
+      <!-- Logo and description -->
+      <div class="footer-section">
+        <h2 class="footer-logo">
+          OSAMA <span>MOVIES</span>
+        </h2>
+        <p>
+          Your destination for discovering movies.
+          Search films and enjoy your favorite entertainment.
+        </p>
+      </div>
+
+      <!-- Quick links -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#movies">Movies</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Categories -->
+      <div class="footer-section">
+        <h3>Categories</h3>
+        <ul>
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Comedy</a></li>
+          <li><a href="#">Drama</a></li>
+          <li><a href="#">Adventure</a></li>
+        </ul>
+      </div>
+
+      <!-- Social media -->
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">Instagram</a>
+          <a href="#" target="_blank">YouTube</a>
+          <a href="#" target="_blank">TikTok</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; <span id="yearNow"></span> OSAMA MOVIES. All Rights Reserved.</p>
+      
+    </div>
+  </footer>
+
+  <script>
+    /* ============================================================
+       IndexedDB helper (Gusoma amafoto yabitswe)
+       ============================================================ */
+    const DB_NAME = "osama_movies_db";
+    const DB_VERSION = 2;
+    const POSTER_STORE = "posters";
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains("videos")) db.createObjectStore("videos");
+          if (!db.objectStoreNames.contains(POSTER_STORE)) db.createObjectStore(POSTER_STORE);
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function getPosterBlob(id) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(POSTER_STORE, "readonly");
+        const req = tx.objectStore(POSTER_STORE).get(id);
+        req.onsuccess = () => res(req.result || null);
+        req.onerror = () => rej(req.error);
+      });
+    }
+
+    async function resolvePoster(film) {
+      if (film.hasLocalPoster) {
+        try {
+          const blob = await getPosterBlob(film.id);
+          if (blob) return URL.createObjectURL(blob);
+        } catch {}
+      }
+      return film.poster || "";
+    }
+
+    async function resolveActorImage(imageString, actorName) {
+      if (!imageString) return `<span>${actorName.charAt(0).toUpperCase()}</span>`; 
+      
+      if (imageString.startsWith("local:")) {
+        const imgId = imageString.replace("local:", "");
+        try {
+           const blob = await getPosterBlob(imgId);
+           if (blob) return `<img src="${URL.createObjectURL(blob)}" alt="${actorName}">`;
+        } catch {}
+      } else {
+        return `<img src="${imageString}" alt="${actorName}">`;
+      }
+      
+      return `<span>${actorName.charAt(0).toUpperCase()}</span>`;
+    }
+
+    /* ============================================================
+       Cast Page Logic
+       ============================================================ */
+    const FILMS_KEY = "osama_free_films";
+    const castGrid = document.getElementById("castGrid");
+
+    function loadFilms() {
+      try {
+        const raw = localStorage.getItem(FILMS_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch { return []; }
+    }
+
+    async function renderCast() {
+      const films = loadFilms();
+      const filmsWithCast = films.filter(f => f.cast && f.cast.trim() !== "");
+      
+      if (!filmsWithCast.length) {
+        castGrid.innerHTML = "<p style='color:var(--muted);'>No cast information added yet. Please add actors in the Admin Panel.</p>";
+        return;
+      }
+
+      const actorsMap = {};
+
+      filmsWithCast.forEach(film => {
+        const actors = film.cast.split(",").map(a => a.trim());
+        
+        actors.forEach(actorName => {
+          if (!actorName) return;
+          if (!actorsMap[actorName]) {
+            actorsMap[actorName] = {
+              name: actorName,
+              bio: film.castBio || "No biography available.",
+              image: film.castImage || "", 
+              films: []
+            };
+          }
+          actorsMap[actorName].films.push(film);
+        });
+      });
+
+      castGrid.innerHTML = "";
+
+      for (const actor of Object.values(actorsMap)) {
+        const avatarHtml = await resolveActorImage(actor.image, actor.name);
+
+        let filmsHtml = "";
+        for (const f of actor.films) {
+          const posterSrc = await resolvePoster(f);
+          const posterHtml = posterSrc 
+            ? `<img src="${posterSrc}" class="film-poster-small" alt="poster">` 
+            : `<div class="film-poster-small" style="display:grid;place-items:center;font-size:0.6rem;">No img</div>`;
+
+          filmsHtml += `
+            <a href="watch.html?id=${encodeURIComponent(f.id)}" class="film-item">
+              ${posterHtml}
+              <div class="film-info-small">
+                <span class="film-title">${f.title}</span>
+                <span class="film-year">${f.year || 'N/A'} · ${f.category || 'Movie'}</span>
+              </div>
+              <span class="film-watch-btn">▶ Watch</span>
+            </a>
+          `;
+        }
+
+        const card = document.createElement("div");
+        card.className = "cast-card";
+        
+        card.innerHTML = `
+          <a href="actor.html?name=${encodeURIComponent(actor.name)}" class="actor-link">
+            <div class="actor-avatar">${avatarHtml}</div>
+            <h3>${actor.name}</h3>
+          </a>
+          <p>${actor.bio}</p>
+          <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: white;">Movies:</h4>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            ${filmsHtml}
+          </div>
+        `;
+        castGrid.appendChild(card);
+      }
+    }
+
+    document.getElementById("yearNow").textContent = new Date().getFullYear();
+    renderCast();
+  </script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actor Films | Osama Movies</title>
+  <style>
+    :root {
+      --background: #080b14;
+      --surface: #121827;
+      --surface-light: #1b2437;
+      --text: #f5f7ff;
+      --muted: #a9b3c9;
+      --blue: #2388ff;
+      --border: #29344a;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+    body { font-family: "Segoe UI", Arial, sans-serif; background: var(--background); color: var(--text); margin: 0; padding: 0; }
+    
+    .navbar { display: flex; justify-content: space-between; padding: 20px 4%; background: var(--surface); border-bottom: 1px solid var(--border); align-items: center; }
+    .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: white; }
+    .logo span { color: var(--blue); }
+    .navbar nav a { color: var(--muted); text-decoration: none; margin-left: 20px; font-weight: 600; }
+    .navbar nav a:hover { color: var(--blue); }
+    
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 4%; }
+    
+    .actor-profile { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; background: var(--surface); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+    .actor-avatar-large { width: 80px; height: 80px; border-radius: 50%; background: var(--surface-light); border: 3px solid var(--blue); display: flex; align-items: center; justify-content: center; font-size: 2rem; overflow: hidden; flex-shrink: 0; }
+    .actor-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+    .actor-details h1 { margin: 0 0 5px 0; font-size: 2rem; color: white; }
+    .actor-details p { color: var(--muted); margin: 0; font-size: 1rem; }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+    }
+    .movie-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .movie-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--blue);
+    }
+    .movie-poster { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: var(--surface-light); }
+    .movie-info { padding: 12px; display: flex; flex-direction: column; flex: 1; }
+    .movie-info h3 { font-size: 1rem; margin: 0 0 4px 0; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .movie-info p { font-size: 0.85rem; color: var(--muted); margin: 0 0 12px 0; }
+    .watch-button { display: block; text-align: center; background: var(--blue); color: white; padding: 8px; border-radius: var(--radius-sm); font-weight: bold; margin-top: auto; text-decoration: none; }
+    .watch-button:hover { background: #0869d5; }
+
+    
+/* OSAMA MOVIES FOOTER */
+
+.main-footer {
+    background: #061b42;
+    color: white;
+    padding: 50px 7% 15px;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 35px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-section h3 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #1685ff;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.footer-logo {
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.footer-logo span {
+    color: #1685ff;
+}
+
+.footer-section p {
+    color: #c5d4eb;
+    line-height: 1.7;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 12px;
+}
+
+.footer-section a {
+    color: #c5d4eb;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-section a:hover {
+    color: #1685ff;
+    padding-left: 5px;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #29466e;
+    margin-top: 40px;
+    padding-top: 20px;
+    text-align: center;
+    color: #c5d4eb;
+    font-size: 14px;
+}
+
+.footer-bottom strong {
+    color: #1685ff;
+}
+
+/* Mobile responsive */
+
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+    }
+
+    .main-footer {
+        padding: 35px 7% 15px;
+    }
+}
+
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a class="logo" href="index.html">OSAMA <span>MOVIES</span></a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cast.html">Cast & Crew</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="actor-profile" id="actorProfile"></div>
+    <h2 style="margin-bottom: 20px; color: white;" id="filmsTitle">Movies</h2>
+    <div id="actorMovies" class="movie-grid"></div>
+  </div>
+    <footer class="main-footer">
+    <div class="footer-container">
+
+      <!-- Logo and description -->
+      <div class="footer-section">
+        <h2 class="footer-logo">
+          OSAMA <span>MOVIES</span>
+        </h2>
+        <p>
+          Your destination for discovering movies.
+          Search films and enjoy your favorite entertainment.
+        </p>
+      </div>
+
+      <!-- Quick links -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#movies">Movies</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Categories -->
+      <div class="footer-section">
+        <h3>Categories</h3>
+        <ul>
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Comedy</a></li>
+          <li><a href="#">Drama</a></li>
+          <li><a href="#">Adventure</a></li>
+        </ul>
+      </div>
+
+      <!-- Social media -->
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">Instagram</a>
+          <a href="#" target="_blank">YouTube</a>
+          <a href="#" target="_blank">TikTok</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; <span id="yearNow"></span> OSAMA MOVIES. All Rights Reserved.</p>
+      
+    </div>
+  </footer>
+
+  <script>
+    const DB_NAME = "osama_movies_db";
+    const DB_VERSION = 2;
+    const POSTER_STORE = "posters";
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains("videos")) db.createObjectStore("videos");
+          if (!db.objectStoreNames.contains(POSTER_STORE)) db.createObjectStore(POSTER_STORE);
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function getPosterBlob(id) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(POSTER_STORE, "readonly");
+        const req = tx.objectStore(POSTER_STORE).get(id);
+        req.onsuccess = () => res(req.result || null);
+        req.onerror = () => rej(req.error);
+      });
+    }
+
+    async function resolvePoster(film) {
+      if (film.hasLocalPoster) {
+        try {
+          const blob = await getPosterBlob(film.id);
+          if (blob) return URL.createObjectURL(blob);
+        } catch {}
+      }
+      return film.poster || "";
+    }
+
+    async function resolveActorImage(imageString, actorName) {
+      if (!imageString) return `<span>${actorName.charAt(0).toUpperCase()}</span>`; 
+      if (imageString.startsWith("local:")) {
+        const imgId = imageString.replace("local:", "");
+        try {
+           const blob = await getPosterBlob(imgId);
+           if (blob) return `<img src="${URL.createObjectURL(blob)}" alt="${actorName}">`;
+        } catch {}
+      } else {
+        return `<img src="${imageString}" alt="${actorName}">`;
+      }
+      return `<span>${actorName.charAt(0).toUpperCase()}</span>`;
+    }
+
+    const FILMS_KEY = "osama_free_films";
+    const actorProfile = document.getElementById("actorProfile");
+    const actorMovies = document.getElementById("actorMovies");
+    const filmsTitle = document.getElementById("filmsTitle");
+
+    function loadFilms() {
+      try {
+        const raw = localStorage.getItem(FILMS_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch { return []; }
+    }
+
+    async function renderActor() {
+      // ✅ Fata izina ry'umukinnyi muri URL (nka: actor.html?name=rocky)
+      const urlParams = new URLSearchParams(window.location.search);
+      const actorName = urlParams.get('name'); // ✅ Hano twahinduye 'id' tuyita 'name'
+
+      if (!actorName) {
+        actorProfile.innerHTML = `<h2 style="color:var(--muted);">No actor selected.</h2>`;
+        return;
+      }
+
+      const films = loadFilms();
+      
+      // Shakisha filimi zifite uyu mukinnyi
+      const actorFilms = films.filter(f => 
+        f.cast && f.cast.split(",").map(a => a.trim().toLowerCase()).includes(actorName.toLowerCase())
+      );
+
+      if (actorFilms.length === 0) {
+        actorProfile.innerHTML = `<h2 style="color:var(--muted);">Actor not found in any film.</h2>`;
+        return;
+      }
+
+      // Fata amakuru y'umukinnyi (Bio, Image) kuva kuri filimi ye ya mbere
+      const actorData = actorFilms[0]; 
+      const bio = actorData.castBio || "No biography available.";
+      const image = actorData.castImage || "";
+
+      // Erekana Profile ye
+      const avatarHtml = await resolveActorImage(image, actorName);
+      actorProfile.innerHTML = `
+        <div class="actor-avatar-large">${avatarHtml}</div>
+        <div class="actor-details">
+          <h1>${actorName}</h1>
+          <p>${bio}</p>
+        </div>
+      `;
+
+      filmsTitle.textContent = `Movies by ${actorName}`;
+
+      // Erekana filimi ze
+      actorMovies.innerHTML = "";
+      for (const film of actorFilms) {
+        const posterSrc = await resolvePoster(film);
+        const posterHtml = posterSrc 
+          ? `<img src="${posterSrc}" class="movie-poster" alt="poster">` 
+          : `<div class="movie-poster" style="display:grid;place-items:center;font-size:0.8rem;">No img</div>`;
+
+        const card = document.createElement("article");
+        card.className = "movie-card";
+        card.innerHTML = `
+          ${posterHtml}
+          <div class="movie-info">
+            <h3>${film.title}</h3>
+            <p>${film.year || 'N/A'} · ${film.category || 'Movie'}</p>
+            <a href="watch.html?id=${encodeURIComponent(film.id)}" class="watch-button">▶ Watch Free</a>
+          </div>
+        `;
+        actorMovies.appendChild(card);
+      }
+    }
+
+    renderActor();
+  </script>
+</body>
+</html>
