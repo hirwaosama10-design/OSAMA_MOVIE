@@ -1,0 +1,816 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn more about OSAMA MOVIES, our mission, and our movie discovery platform.">
+
+  <title>About Us | OSAMA MOVIES</title>
+<!-- Browser Tab Logo (Favicon) -->
+<link rel="icon" type="image/png" href="logo.png">
+  <style>
+    :root {
+      --background: #080d18;
+      --card: #111c30;
+      --blue: #087cff;
+      --light-blue: #39a0ff;
+      --white: #ffffff;
+      --text: #b8c5d9;
+      --border: rgba(255,255,255,0.09);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--white);
+      line-height: 1.7;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      width: 100%;
+      min-height: 75px;
+      padding: 12px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0c1526;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 145px;
+      max-height: 55px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--light-blue);
+    }
+
+    /* HERO */
+    .about-hero {
+      min-height: 390px;
+      padding: 85px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background:
+        linear-gradient(rgba(5,13,28,0.82), rgba(5,13,28,0.95)),
+        radial-gradient(circle at center, #0754a8, #080d18 70%);
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero-content .small-title {
+      color: var(--light-blue);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(38px, 6vw, 65px);
+      margin: 15px 0;
+      line-height: 1.2;
+    }
+
+    .hero-content h1 span {
+      color: var(--blue);
+    }
+
+    .hero-content p {
+      color: var(--text);
+      font-size: 17px;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    /* GENERAL SECTION */
+    .section {
+      padding: 75px 8%;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-heading h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .section-heading h2 span {
+      color: var(--light-blue);
+    }
+
+    .section-heading p {
+      color: var(--text);
+    }
+
+    /* ABOUT CONTENT */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 55px;
+    }
+
+    .about-text h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .about-text h2 span {
+      color: var(--light-blue);
+    }
+
+    .about-text p {
+      color: var(--text);
+      margin-bottom: 17px;
+    }
+
+    .about-image {
+      min-height: 330px;
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(0,40,90,0.25), rgba(0,0,0,0.5)),
+        url("about-movies.jpg") center/cover no-repeat,
+        #10294a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+    }
+
+    .about-image span {
+      font-size: 75px;
+      filter: drop-shadow(0 5px 15px #000);
+    }
+
+    /* MISSION AND VISION */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+    }
+
+    .mission-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 35px;
+      border-radius: 15px;
+      transition: 0.3s;
+    }
+
+    .mission-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--blue);
+    }
+
+    .mission-icon {
+      width: 55px;
+      height: 55px;
+      border-radius: 12px;
+      background: rgba(8,124,255,0.15);
+      color: var(--light-blue);
+      display: grid;
+      place-items: center;
+      font-size: 27px;
+      margin-bottom: 18px;
+    }
+
+    .mission-card h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .mission-card p {
+      color: var(--text);
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      padding: 28px 22px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--blue);
+    }
+
+    .feature-card .icon {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    /* CALL TO ACTION */
+    .about-cta {
+      margin: 20px 8% 75px;
+      padding: 55px 25px;
+      border-radius: 18px;
+      text-align: center;
+      background: linear-gradient(120deg, #0754a8, #087cff);
+    }
+
+    .about-cta h2 {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .about-cta p {
+      margin-bottom: 25px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: white;
+      color: #0754a8;
+      padding: 12px 28px;
+      border-radius: 7px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .cta-button:hover {
+      background: #dcecff;
+      transform: translateY(-3px);
+    }
+
+    /* FOOTER */
+    .main-footer {
+      background: #050a13;
+      border-top: 1px solid var(--border);
+      padding: 55px 8% 0;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 35px;
+      padding-bottom: 40px;
+    }
+
+    .footer-brand img {
+      width: 145px;
+      max-height: 55px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    .footer-brand p {
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .footer-links h4 {
+      margin-bottom: 18px;
+      color: var(--white);
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: var(--text);
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--light-blue);
+      padding-left: 4px;
+    }
+
+    .footer-social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 20px 10px;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .footer-bottom strong {
+      color: var(--light-blue);
+    }
+
+    /* MOBILE RESPONSIVENESS */
+    @media (max-width: 850px) {
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 12px 5%;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .nav-links {
+        gap: 17px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-links a {
+        font-size: 13px;
+      }
+
+      .section {
+        padding: 55px 6%;
+      }
+
+      .mission-grid,
+      .features-grid,
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+
+      .about-cta {
+        margin: 10px 6% 55px;
+      }
+    }
+
+    /* =================================
+   REDUCE UNNECESSARY PAGE SPACING
+================================= */
+
+/* Hero section */
+.about-hero {
+  min-height: 270px;
+  padding: 55px 20px;
+}
+
+/* General sections */
+.section {
+  padding: 40px 8%;
+}
+
+/* Section headings */
+.section-heading {
+  margin-bottom: 25px;
+}
+
+.section-heading h2 {
+  margin-bottom: 5px;
+}
+
+/* About content */
+.about-content {
+  gap: 30px;
+}
+
+.about-image {
+  min-height: 260px;
+}
+
+/* Mission and vision */
+.mission-grid {
+  gap: 18px;
+}
+
+.mission-card {
+  padding: 25px;
+}
+
+/* Features */
+.features-grid {
+  gap: 15px;
+}
+
+.feature-card {
+  padding: 22px 18px;
+}
+
+/* Call to action */
+.about-cta {
+  margin: 10px 8% 40px;
+  padding: 35px 20px;
+}
+
+/* Footer */
+.main-footer {
+  padding: 35px 8% 0;
+}
+
+.footer-container {
+  gap: 25px;
+  padding-bottom: 25px;
+}
+
+.footer-bottom {
+  padding: 15px 10px;
+}
+
+/* Mobile spacing */
+@media (max-width: 600px) {
+  .section {
+    padding: 30px 6%;
+  }
+
+  .about-hero {
+    min-height: 230px;
+    padding: 40px 15px;
+  }
+
+  .about-image {
+    min-height: 200px;
+  }
+
+  .about-cta {
+    margin: 5px 6% 30px;
+    padding: 28px 18px;
+  }
+
+  .main-footer {
+    padding: 30px 6% 0;
+  }
+
+  .footer-container {
+    gap: 22px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="navbar">
+
+    <a href="index.html" class="logo">
+      <img src="logo.png" alt="OSAMA MOVIES Logo">
+    </a>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#films">Movies</a></li>
+        <li><a href="about.html" class="active">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+
+  <!-- HERO SECTION -->
+  <section class="about-hero">
+
+    <div class="hero-content">
+
+      <span class="small-title">Welcome to OSAMA MOVIES</span>
+
+      <h1>About <span>Us</span></h1>
+
+      <p>
+        Discover the world of movies with OSAMA MOVIES.
+        Explore films, discover new stories, and find your next
+        favourite movie in one place.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- WHO WE ARE -->
+  <section class="section">
+
+    <div class="about-content">
+
+      <div class="about-text">
+
+        <h2>Who <span>We Are</span></h2>
+
+        <p>
+          OSAMA MOVIES is a movie discovery platform created for
+          people who enjoy exploring the world of cinema.
+        </p>
+
+        <p>
+          Our goal is to make it easier for visitors to discover
+          movies from different genres, explore film information,
+          watch available trailers, and find official viewing options.
+        </p>
+
+        <p>
+          Whether you enjoy Action, Comedy, Drama, Horror, or
+          Adventure, OSAMA MOVIES brings movie discoveries together
+          in one convenient place.
+        </p>
+
+      </div>
+
+      <div class="about-image" role="img" aria-label="Movie experience">
+        <span>🎬</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- MISSION AND VISION -->
+  <section class="section">
+
+    <div class="section-heading">
+      <h2>Our <span>Purpose</span></h2>
+      <p>What inspires us at OSAMA MOVIES.</p>
+    </div>
+
+    <div class="mission-grid">
+
+      <div class="mission-card">
+
+        <div class="mission-icon">🎯</div>
+
+        <h3>Our Mission</h3>
+
+        <p>
+          To provide a simple and enjoyable platform where movie
+          lovers can discover films, explore trailers, and access
+          information about available viewing options.
+        </p>
+
+      </div>
+
+      <div class="mission-card">
+
+        <div class="mission-icon">🌍</div>
+
+        <h3>Our Vision</h3>
+
+        <p>
+          To grow into a trusted movie discovery destination,
+          connecting people with interesting films and memorable
+          stories from around the world.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- WHY CHOOSE US -->
+  <section class="section">
+
+    <div class="section-heading">
+      <h2>Why Choose <span>OSAMA MOVIES?</span></h2>
+
+      <p>
+        Explore a better way to discover your next movie.
+      </p>
+    </div>
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="icon">🎥</div>
+        <h3>Movie Collection</h3>
+        <p>
+          Explore movies from different genres and discover
+          stories that interest you.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🔎</div>
+        <h3>Easy Discovery</h3>
+        <p>
+          Find movies easily using the available search and
+          category features.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📱</div>
+        <h3>Responsive Design</h3>
+        <p>
+          Enjoy a convenient browsing experience on computers,
+          tablets, and smartphones.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">⭐</div>
+        <h3>Different Genres</h3>
+        <p>
+          Discover Action, Comedy, Drama, Horror, Adventure,
+          and many other movie categories.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">▶️</div>
+        <h3>Trailers</h3>
+        <p>
+          Explore available movie trailers before deciding
+          what to watch.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">💙</div>
+        <h3>Made for Movie Lovers</h3>
+        <p>
+          A platform built around discovering and enjoying
+          great movie experiences.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CALL TO ACTION -->
+  <section class="about-cta">
+
+    <h2>Ready to Explore Movies?</h2>
+
+    <p>
+      Start discovering interesting movies and find your
+      next favourite story.
+    </p>
+
+    <a href="index.html#films" class="cta-button">
+      Explore Movies
+    </a>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+
+    <div class="footer-container">
+
+      <div class="footer-brand">
+
+        <a href="index.html">
+          <img src="logo.png" alt="OSAMA MOVIES Logo">
+        </a>
+
+        <p>
+          OSAMA MOVIES is your destination for discovering
+          films, exploring trailers, and finding movie information
+          from different genres.
+        </p>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <h4>Quick Links</h4>
+
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#films">Movies</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <h4>Categories</h4>
+
+        <ul>
+          <li><a href="index.html#films">Action</a></li>
+          <li><a href="index.html#films">Comedy</a></li>
+          <li><a href="index.html#films">Drama</a></li>
+          <li><a href="index.html#films">Horror</a></li>
+          <li><a href="index.html#films">Adventure</a></li>
+        </ul>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <h4>Follow Us</h4>
+
+        <div class="footer-social-links">
+          <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="#" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+          <a href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href="#" target="_blank" rel="noopener noreferrer">TikTok</a>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <p>
+        &copy; <span id="yearNow"></span>
+        <strong>OSAMA MOVIES</strong>. All Rights Reserved.
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <script>
+    // Automatically update copyright year
+    document.getElementById("yearNow").textContent =
+      new Date().getFullYear();
+  </script>
+
+</body>
+</html>

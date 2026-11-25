@@ -1,0 +1,386 @@
+<?php
+session_start();
+
+$message = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Demo credentials
+    $valid_username = "admin";
+    $valid_password = "123456";
+
+    if ($username === $valid_username && $password === $valid_password) {
+        $_SESSION['username'] = $username;
+        header("Location: ?dashboard");
+        exit();
+    } else {
+        $message = "Invalid username or password!";
+    }
+}
+
+// Dashboard section
+if (isset($_GET['dashboard']) && isset($_SESSION['username'])) {
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body{
+            margin:0;
+            font-family:Segoe UI,sans-serif;
+            background:#111827;
+            color:white;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            height:100vh;
+        }
+
+        .card{
+            text-align:center;
+            padding:40px;
+            border-radius:20px;
+            background:#1f2937;
+            box-shadow:0 10px 25px rgba(0,0,0,.3);
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            padding:12px 20px;
+            background:#ef4444;
+            color:white;
+            text-decoration:none;
+            border-radius:10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Welcome, <?php echo $_SESSION['username']; ?> 👋</h1>
+    <p>You have successfully logged in.</p>
+
+    <a href="?logout">Logout</a>
+</div>
+
+</body>
+</html>
+<?php
+exit();
+}
+
+// Logout
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Modern Login</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+:root{
+    --bg-gradient: linear-gradient(135deg,#4f46e5,#7c3aed,#ec4899);
+    --card-bg: rgba(255,255,255,0.15);
+    --text-color: #fff;
+    --input-bg: rgba(255,255,255,0.20);
+    --btn-bg: #ffffff;
+    --btn-color: #4f46e5;
+}
+
+body.light-mode{
+    --bg-gradient: linear-gradient(135deg,#e0e7ff,#f3f4f6,#fdf2f8);
+    --card-bg: rgba(255,255,255,0.9);
+    --text-color: #222;
+    --input-bg: rgba(0,0,0,0.05);
+    --btn-bg: #4f46e5;
+    --btn-color: #ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg-gradient);
+    transition:.3s;
+}
+
+.container{
+    width:380px;
+    position:relative;
+}
+
+.login-card{
+    background:var(--card-bg);
+    backdrop-filter:blur(15px);
+    border-radius:25px;
+    padding:40px;
+    color:var(--text-color);
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    border:1px solid rgba(255,255,255,.2);
+}
+
+.theme-toggle{
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    cursor:pointer;
+    background:rgba(255,255,255,.25);
+    color:white;
+    font-size:18px;
+}
+
+body.light-mode .theme-toggle{
+    background:#4f46e5;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo i{
+    font-size:60px;
+    margin-bottom:10px;
+}
+
+.logo h2{
+    font-size:28px;
+    font-weight:600;
+}
+
+.input-group{
+    position:relative;
+    margin-bottom:18px;
+}
+
+.input-group i{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.input-group input{
+    width:100%;
+    padding:14px 45px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:var(--input-bg);
+    color:var(--text-color);
+    font-size:15px;
+}
+
+.password-toggle{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+}
+
+.error{
+    background:rgba(255,0,0,.2);
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.options{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    margin:15px 0;
+}
+
+.options a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:var(--btn-bg);
+    color:var(--btn-color);
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.login-btn:hover{
+    transform:translateY(-3px);
+}
+
+.register{
+    text-align:center;
+    margin-top:20px;
+}
+
+.register a{
+    color:inherit;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+@media(max-width:450px){
+
+    .container{
+        width:92%;
+    }
+
+    .login-card{
+        padding:30px;
+    }
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<button class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+</button>
+
+<div class="login-card">
+
+    <div class="logo">
+        <i class="fas fa-user-shield"></i>
+        <h2>Welcome Back</h2>
+    </div>
+
+    <?php if($message): ?>
+        <div class="error">
+            <?php echo $message; ?>
+        </div>
+    <?php endif; ?>
+
+    <form method="POST">
+
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input
+                type="text"
+                name="username"
+             required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                required>
+
+            <span class="password-toggle" onclick="togglePassword()">
+                <i class="fas fa-eye" id="eyeIcon"></i>
+            </span>
+        </div>
+
+        <div class="options">
+            <label>
+                <input type="checkbox">
+                Remember Me
+            </label>
+
+            #Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">
+            Sign In
+        </button>
+
+    </form>
+
+    <div class="register">
+        Don't have an account?
+        #Register</a>
+    </div>
+
+</div>
+</div>
+
+<script>
+
+// Theme Toggle
+const themeBtn = document.getElementById('themeToggle');
+const themeIcon = themeBtn.querySelector('i');
+
+if(localStorage.getItem('theme') === 'light'){
+    document.body.classList.add('light-mode');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+}
+
+themeBtn.addEventListener('click',() => {
+
+    document.body.classList.toggle('light-mode');
+
+    if(document.body.classList.contains('light-mode')){
+        localStorage.setItem('theme','light');
+        themeIcon.classList.replace('fa-moon','fa-sun');
+    }else{
+        localStorage.setItem('theme','dark');
+        themeIcon.classList.replace('fa-sun','fa-moon');
+    }
+});
+
+// Show/Hide Password
+function togglePassword(){
+
+    const password = document.getElementById('password');
+    const eye = document.getElementById('eyeIcon');
+
+    if(password.type === 'password'){
+        password.type = 'text';
+        eye.classList.replace('fa-eye','fa-eye-slash');
+    }else{
+        password.type = 'password';
+        eye.classList.replace('fa-eye-slash','fa-eye');
+    }
+}
+
+</script>
+
+</body>
+</html>

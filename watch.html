@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch | OSAMA MOVIES</title>
+<!-- Browser Tab Logo (Favicon) -->
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+:root {
+  --bg:#080d18;
+  --surface:#121b2c;
+  --card:#1b2940;
+  --text:#f5f7ff;
+  --muted:#a9b3c9;
+  --blue:#2388ff;
+  --cyan:#30d5ff;
+  --green:#27c281;
+  --border:#293953;
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body {
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+}
+
+a {
+  text-decoration:none;
+  color:inherit;
+}
+
+img {
+  max-width:100%;
+  display:block;
+}
+
+/* NAVBAR */
+.navbar {
+  min-height:70px;
+  padding:12px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#090f1d;
+  border-bottom:1px solid var(--border);
+}
+
+.logo img {
+  height:42px;
+}
+
+nav {
+  display:flex;
+  gap:22px;
+}
+
+nav a {
+  color:var(--muted);
+  font-size:14px;
+  font-weight:bold;
+}
+
+nav a:hover {
+  color:var(--cyan);
+}
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+.watch-page {
+  max-width:1400px;
+  margin:auto;
+  padding:30px 5% 50px;
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+
+/* TOP SECTION: Player & Info + Comments */
+.top-section {
+  display:grid;
+  grid-template-columns:minmax(0,2.5fr) minmax(320px,1fr);
+  gap:25px;
+  align-items:start;
+}
+
+.left-column {
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.right-column {
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* PLAYER */
+.player-section {
+  background:var(--surface);
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.player-top-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+  gap:10px;
+}
+
+.player-title {
+  font-size:12px;
+  font-weight:bold;
+  color:var(--muted);
+  letter-spacing:1px;
+}
+
+.player-title::before {
+  content:"● ";
+  color:var(--green);
+}
+
+.player-hint {
+  font-size:10px;
+  color:var(--muted);
+}
+
+.video-wrapper {
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.video-wrapper video {
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  background:#000;
+}
+
+.video-watermark {
+  position:absolute;
+  top:12px;
+  right:12px;
+  height:35px;
+  z-index:10;
+  pointer-events:none;
+}
+
+.big-play-btn {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:65px;
+  height:65px;
+  border:0;
+  border-radius:50%;
+  background:var(--blue);
+  color:white;
+  font-size:25px;
+  cursor:pointer;
+  z-index:15;
+}
+
+.big-play-btn.hidden {
+  display:none;
+}
+
+.fs-btn {
+  position:absolute;
+  right:12px;
+  bottom:45px;
+  z-index:20;
+  padding:7px 10px;
+  border:1px solid #ffffff55;
+  border-radius:6px;
+  background:#0009;
+  color:white;
+  cursor:pointer;
+}
+
+.video-wrapper:fullscreen {
+  width:100vw;
+  height:100vh;
+  border-radius:0;
+}
+
+.video-wrapper:fullscreen video {
+  height:100%;
+}
+
+/* ============================================================
+   FILM DETAILS (YAHINDUWE: IRI MU RUBANDE RW'IBURYO)
+   ============================================================ */
+.watch-header {
+  background: var(--surface);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  border-bottom: none; /* Dukuye umurongo wari uhari mbere */
+}
+
+.eyebrow {
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:2px;
+  margin-bottom:7px;
+}
+
+.watch-details h1 {
+  font-size:24px;
+  line-height:1.2;
+  margin-bottom:12px;
+  overflow-wrap:anywhere;
+}
+
+.film-meta {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:15px;
+}
+
+.meta-chip {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:4px 8px;
+  font-size:10px;
+}
+
+.film-description {
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:18px;
+}
+
+.watch-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.download-link {
+  background:var(--green);
+  color:white;
+  padding:10px 14px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.secondary-link {
+  border:1px solid var(--border);
+  padding:9px 12px;
+  border-radius:6px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.secondary-link:hover {
+  background: var(--card);
+  color: var(--text);
+}
+
+/* ============================================================
+   COMMENTS SECTION (MURI CARD)
+   ============================================================ */
+.comments-section {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:15px;
+  display:flex;
+  flex-direction:column;
+}
+
+.comments-title {
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.comments-subtitle {
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.comment-form {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding-bottom:15px;
+  margin-bottom:15px;
+  border-bottom:1px solid var(--border);
+}
+
+.comment-form textarea {
+  width:100%;
+  min-height:85px;
+  padding:10px;
+  resize:vertical;
+  background:#0c1423;
+  color:white;
+  border:1px solid var(--border);
+  border-radius:6px;
+  font-family:inherit;
+  font-size:12px;
+}
+
+.comment-form textarea:focus {
+  outline:none;
+  border-color:var(--blue);
+}
+
+.comment-submit-btn {
+  align-self:flex-start;
+  background:var(--blue);
+  color:white;
+  border:0;
+  padding:8px 12px;
+  border-radius:5px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:11px;
+}
+
+/* ✅ SCROLL KURI COMMENTS */
+.comment-list {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  max-height: 350px; /* Bihindutse kugira ngo bigaragare neza */
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.comment-list::-webkit-scrollbar {
+  width: 5px;
+}
+.comment-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 20px;
+}
+
+.comment-item {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px;
+}
+
+.comment-head {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:7px;
+}
+
+.comment-avatar {
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--blue);
+  color:white;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.comment-user {
+  font-size:11px;
+  font-weight:bold;
+}
+
+.comment-date {
+  font-size:9px;
+  color:var(--muted);
+  margin-left:auto;
+}
+
+.comment-body {
+  font-size:11px;
+  padding-left:33px;
+  overflow-wrap:anywhere;
+}
+
+.comment-reply {
+  margin:10px 0 0 30px;
+  padding:9px;
+  border-left:3px solid var(--blue);
+  background:#2388ff12;
+  border-radius:5px;
+}
+
+.comment-reply-label {
+  color:var(--cyan);
+  font-size:10px;
+  font-weight:bold;
+  margin-bottom:4px;
+}
+
+.comment-reply-text {
+  font-size:11px;
+  overflow-wrap:anywhere;
+}
+
+.comments-empty {
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:18px 5px;
+}
+
+/* ============================================================
+   MORE FILMS (MUNSI HOSE)
+   ============================================================ */
+.side-panel {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.side-panel-title {
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.side-panel-title::before {
+  content:"🎬 ";
+}
+
+.side-film-list {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
+  gap:16px;
+  padding:3px;
+}
+
+.side-film-item {
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  padding:10px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  transition:.25s ease;
+}
+
+.side-film-item:hover {
+  background:#263852;
+  border-color:var(--blue);
+  transform:translateY(-5px);
+}
+
+.side-film-thumb {
+  width:100%;
+  aspect-ratio:3/4;
+  overflow:hidden;
+  border-radius:6px;
+  background:#080d18;
+  margin-bottom:10px;
+  display:grid;
+  place-items:center;
+  color:var(--muted);
+}
+
+.side-film-thumb img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.side-film-info {
+  min-width:0;
+}
+
+.side-film-title {
+  font-size:13px;
+  font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.side-film-meta {
+  font-size:11px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.side-film-genres {
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:6px;
+}
+
+.side-genre-pill {
+  font-size:9px;
+  padding:2px 6px;
+  border-radius:10px;
+  background:#263b5d;
+  color:var(--cyan);
+}
+
+/* FOOTER */
+.main-footer {
+  background:#061b42;
+  padding:35px 5% 15px;
+  margin-top:30px;
+}
+
+.footer-container {
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px;
+}
+
+.footer-section h3 {
+  font-size:14px;
+  margin-bottom:12px;
+  border-bottom:2px solid var(--blue);
+  display:inline-block;
+  padding-bottom:5px;
+}
+
+.footer-logo {
+  font-size:20px;
+}
+
+.footer-logo span {
+  color:var(--cyan);
+}
+
+.footer-section p,
+.footer-section a {
+  color:#c5d4eb;
+  font-size:12px;
+}
+
+.footer-section ul {
+  list-style:none;
+}
+
+.footer-section li {
+  margin-bottom:7px;
+}
+
+.social-links {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.footer-bottom {
+  text-align:center;
+  border-top:1px solid #29466e;
+  margin-top:25px;
+  padding-top:15px;
+  color:#c5d4eb;
+  font-size:11px;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px) {
+  .top-section {
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:500px) {
+  .navbar {
+    padding:12px 4%;
+  }
+
+  nav {
+    gap:12px;
+  }
+
+  nav a {
+    font-size:11px;
+  }
+
+  .watch-page {
+    padding:20px 4% 35px;
+  }
+
+  .player-section {
+    padding:10px;
+  }
+
+  .footer-container {
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <a class="logo" href="index.html">
+    <img src="logo.png" alt="Osama Movies">
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#films">Films</a>
+    <a href="cast.html">Cast &amp; Crew</a>
+  </nav>
+</header>
+
+<main class="watch-page">
+
+  <!-- TOP SECTION (Player & Info + Comments) -->
+  <div class="top-section">
+    
+    <!-- IBUMOSO: PLAYER GUSA -->
+    <div class="left-column">
+      <section class="player-section">
+        <div class="player-top-bar">
+          <span class="player-title">Now Playing</span>
+          <span class="player-hint">HD · Fullscreen ⛶</span>
+        </div>
+
+        <div id="videoWrapper" class="video-wrapper">
+          <img src="logo.png" class="video-watermark" alt="Watermark">
+          <p id="playerMessage" style="padding:20px;text-align:center">
+            Loading player...
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- IBURYO: INFO HEJURU, COMMENTS HASI -->
+    <div class="right-column">
+      
+      <!-- ✅ AMAKURU Y'IFILIME (IZINA, DOWNLOAD, ETC) YOSE ARI HANO -->
+      <section class="watch-header">
+        <div class="watch-details">
+          <p class="eyebrow">NOW PLAYING</p>
+          <h1 id="filmTitle">Loading film...</h1>
+          <p id="filmMeta" class="film-meta">—</p>
+          <p id="filmDescription" class="film-description"></p>
+
+          <div class="watch-actions">
+            <a id="downloadBtn" class="download-link" href="#" download hidden>
+              ⬇ Download Film
+            </a>
+            <a class="secondary-link" href="index.html#films">
+              ← Back to films
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMMENTS -->
+      <section class="comments-section">
+        <h2 class="comments-title">💬 Comments &amp; Replies</h2>
+        <p class="comments-subtitle">
+          Share your thoughts about this film.
+        </p>
+
+        <form id="commentForm" class="comment-form">
+          <textarea id="commentText" placeholder="Write your comment here..." required maxlength="800"></textarea>
+          <button type="submit" class="comment-submit-btn">
+            📩 Post Comment
+          </button>
+        </form>
+
+        <div id="commentList" class="comment-list"></div>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- MUNSI HOSE: MORE FILMS -->
+  <section class="side-panel">
+    <h3 class="side-panel-title">More Films</h3>
+    <div id="sideFilmList" class="side-film-list"></div>
+  </section>
+
+</main>
+
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h2 class="footer-logo">OSAMA <span>MOVIES</span></h2>
+      <p>Your destination for discovering movies.</p>
+    </div>
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#films">Movies</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Comedy</a></li>
+        <li><a href="#">Drama</a></li>
+        <li><a href="#">Adventure</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Follow Us</h3>
+      <div class="social-links">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">YouTube</a>
+        <a href="#">TikTok</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © <span id="yearNow"></span> OSAMA MOVIES. All Rights Reserved.
+  </div>
+</footer>
+
+<script>
+/* DATABASE SETTINGS */
+const DB_NAME = "osama_movies_db";
+const DB_VERSION = 2;
+const STORE = "videos";
+const POSTER_STORE = "posters";
+
+function openDB() {
+  return new Promise((resolve,reject) => {
+    const request = indexedDB.open(DB_NAME,DB_VERSION);
+
+    request.onupgradeneeded = () => {
+      const db = request.result;
+
+      if (!db.objectStoreNames.contains(STORE)) {
+        db.createObjectStore(STORE);
+      }
+
+      if (!db.objectStoreNames.contains(POSTER_STORE)) {
+        db.createObjectStore(POSTER_STORE);
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getBlob(store,id) {
+  const db = await openDB();
+
+  return new Promise((resolve,reject) => {
+    const transaction = db.transaction(store,"readonly");
+    const request = transaction.objectStore(store).get(id);
+
+    request.onsuccess = () => resolve(request.result || null);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+const getVideoBlob = id => getBlob(STORE,id);
+const getPosterBlob = id => getBlob(POSTER_STORE,id);
+
+/* STORAGE KEYS */
+const FILMS_KEY = "osama_free_films";
+const COMMENTS_KEY = "osama_film_comments";
+const MESSAGES_KEY = "osama_contact_messages";
+
+const filmTitleEl = document.getElementById("filmTitle");
+const filmMetaEl = document.getElementById("filmMeta");
+const filmDescEl = document.getElementById("filmDescription");
+const downloadBtn = document.getElementById("downloadBtn");
+const videoWrapper = document.getElementById("videoWrapper");
+const playerMessage = document.getElementById("playerMessage");
+
+const commentForm = document.getElementById("commentForm");
+const commentText = document.getElementById("commentText");
+const commentListEl = document.getElementById("commentList");
+const sideFilmList = document.getElementById("sideFilmList");
+
+document.getElementById("yearNow").textContent =
+  new Date().getFullYear();
+
+/* LOAD FILMS */
+function loadFilms() {
+  try {
+    const films = JSON.parse(localStorage.getItem(FILMS_KEY) || "[]");
+    return Array.isArray(films) ? films : [];
+  } catch(error) {
+    console.error(error);
+    return [];
+  }
+}
+
+const FREE_FILMS = loadFilms();
+
+/* COMMENTS */
+function loadComments() {
+  try {
+    const comments = JSON.parse(
+      localStorage.getItem(COMMENTS_KEY) || "[]"
+    );
+
+    return Array.isArray(comments) ? comments : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveComments(comments) {
+  try {
+    localStorage.setItem(COMMENTS_KEY,JSON.stringify(comments));
+    return true;
+  } catch(error) {
+    console.error(error);
+    return false;
+  }
+}
+
+/* ADMIN REPLIES */
+function loadAdminReplies() {
+  try {
+    const messages = JSON.parse(
+      localStorage.getItem(MESSAGES_KEY) || "[]"
+    );
+
+    return Array.isArray(messages) ? messages : [];
+  } catch {
+    return [];
+  }
+}
+
+function findAdminReply(comment) {
+  const messages = loadAdminReplies();
+
+  return messages.find(message =>
+    message.replyToCommentId === comment.id &&
+    message.reply &&
+    message.reply.trim()
+  ) || null;
+}
+
+/* HELPERS */
+function getFilmIdFromURL() {
+  return new URLSearchParams(window.location.search).get("id");
+}
+
+function slug(text) {
+  return String(text || "film")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g,"-")
+    .replace(/[^a-z0-9_-]/g,"");
+}
+
+function escapeHtml(value) {
+  return String(value || "").replace(/[&<>"']/g,char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
+}
+
+function formatCommentDate(value) {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (isNaN(date)) return "";
+
+  return date.toLocaleString();
+}
+
+/* RENDER COMMENTS */
+function renderComments(filmId) {
+  const comments = loadComments()
+    .filter(comment => comment.filmId === filmId)
+    .sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  commentListEl.replaceChildren();
+
+  if (!comments.length) {
+    commentListEl.innerHTML =
+      '<div class="comments-empty">💬 No comments yet. Be the first to comment!</div>';
+    return;
+  }
+
+  comments.forEach(comment => {
+    const item = document.createElement("div");
+    item.className = "comment-item";
+
+    const reply = findAdminReply(comment);
+
+    item.innerHTML = `
+      <div class="comment-head">
+        <div class="comment-avatar">A</div>
+        <div class="comment-user">Anonymous</div>
+        <div class="comment-date">
+          ${escapeHtml(formatCommentDate(comment.date))}
+        </div>
+      </div>
+
+      <div class="comment-body">
+        ${escapeHtml(comment.message).replace(/\n/g,"<br>")}
+      </div>
+
+      ${reply ? `
+        <div class="comment-reply">
+          <div class="comment-reply-label">🛡️ Admin Reply</div>
+          <div class="comment-reply-text">
+            ${escapeHtml(reply.reply).replace(/\n/g,"<br>")}
+          </div>
+        </div>
+      ` : ""}
+    `;
+
+    commentListEl.appendChild(item);
+  });
+}
+
+/* SUBMIT COMMENT */
+commentForm.addEventListener("submit",event => {
+  event.preventDefault();
+
+  const message = commentText.value.trim();
+  const filmId = getFilmIdFromURL();
+
+  if (!message) {
+    alert("Please write a comment.");
+    return;
+  }
+
+  if (!filmId) {
+    alert("Film ID not found.");
+    return;
+  }
+
+  const newComment = {
+    id:"cmt-" + Date.now() + "-" +
+      Math.random().toString(36).slice(2,6),
+    filmId:filmId,
+    name:"Anonymous",
+    email:"",
+    message:message,
+    date:new Date().toISOString()
+  };
+
+  const comments = loadComments();
+  comments.push(newComment);
+
+  if (saveComments(comments)) {
+    commentForm.reset();
+    renderComments(filmId);
+  } else {
+    alert("Could not save your comment.");
+  }
+});
+
+/* GET POSTER */
+async function resolvePoster(film) {
+  if (film.hasLocalPoster) {
+    try {
+      const poster = await getPosterBlob(film.id);
+      if (poster) return URL.createObjectURL(poster);
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  return film.poster || "";
+}
+
+/* VIDEO PLAYER */
+async function mountPlayer(videoUrl,posterUrl) {
+  videoWrapper.replaceChildren();
+
+  const watermark = document.createElement("img");
+  watermark.src = "logo.png";
+  watermark.className = "video-watermark";
+  watermark.alt = "Osama Movies";
+  videoWrapper.appendChild(watermark);
+
+  const video = document.createElement("video");
+  video.controls = true;
+  video.preload = "metadata";
+  video.playsInline = true;
+  video.src = videoUrl;
+
+  if (posterUrl) video.poster = posterUrl;
+
+  videoWrapper.appendChild(video);
+
+  const playButton = document.createElement("button");
+  playButton.className = "big-play-btn";
+  playButton.type = "button";
+  playButton.textContent = "▶";
+  playButton.setAttribute("aria-label","Play film");
+  videoWrapper.appendChild(playButton);
+
+  function showPlayButton() {
+    playButton.classList.remove("hidden");
+  }
+
+  function hidePlayButton() {
+    playButton.classList.add("hidden");
+  }
+
+  playButton.addEventListener("click",async () => {
+    try {
+      await video.play();
+    } catch(error) {
+      console.error(error);
+      showPlayButton();
+    }
+  });
+
+  video.addEventListener("play",hidePlayButton);
+  video.addEventListener("pause",showPlayButton);
+  video.addEventListener("ended",showPlayButton);
+
+  const fullscreenButton = document.createElement("button");
+  fullscreenButton.className = "fs-btn";
+  fullscreenButton.type = "button";
+  fullscreenButton.textContent = "⛶";
+  fullscreenButton.setAttribute("aria-label","Fullscreen");
+  videoWrapper.appendChild(fullscreenButton);
+
+  fullscreenButton.addEventListener("click",async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await videoWrapper.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch(error) {
+      console.error(error);
+    }
+  });
+
+  showPlayButton();
+}
+
+/* MORE FILMS - INDIVIDUAL CARDS */
+async function renderSideFilms(currentId) {
+  sideFilmList.replaceChildren();
+
+  const otherFilms = FREE_FILMS.filter(
+    film => String(film.id) !== String(currentId)
+  );
+
+  if (!otherFilms.length) {
+    sideFilmList.innerHTML =
+      '<p style="color:var(--muted);font-size:12px">No other films available.</p>';
+    return;
+  }
+
+  for (const film of otherFilms) {
+    const posterSrc = await resolvePoster(film);
+
+    const card = document.createElement("a");
+    card.className = "side-film-item";
+    card.href = "watch.html?id=" + encodeURIComponent(film.id);
+    card.title = film.title || "Watch film";
+
+    const posterBox = document.createElement("div");
+    posterBox.className = "side-film-thumb";
+
+    if (posterSrc) {
+      const poster = document.createElement("img");
+      poster.src = posterSrc;
+      poster.alt = film.title || "Film poster";
+      poster.loading = "lazy";
+      posterBox.appendChild(poster);
+    } else {
+      posterBox.textContent = "🎬";
+    }
+
+    const info = document.createElement("div");
+    info.className = "side-film-info";
+
+    const title = document.createElement("div");
+    title.className = "side-film-title";
+    title.textContent = film.title || "Untitled Film";
+
+    const meta = document.createElement("div");
+    meta.className = "side-film-meta";
+    meta.textContent =
+      (film.year || "Unknown year") + " · " +
+      (film.category || "Movie");
+
+    info.appendChild(title);
+    info.appendChild(meta);
+
+    const genres = Array.isArray(film.genres)
+      ? film.genres.slice(0,2)
+      : [];
+
+    if (genres.length) {
+      const genreBox = document.createElement("div");
+      genreBox.className = "side-film-genres";
+
+      genres.forEach(genre => {
+        const pill = document.createElement("span");
+        pill.className = "side-genre-pill";
+        pill.textContent = genre;
+        genreBox.appendChild(pill);
+      });
+
+      info.appendChild(genreBox);
+    }
+
+    card.appendChild(posterBox);
+    card.appendChild(info);
+
+    sideFilmList.appendChild(card);
+  }
+}
+
+/* LOAD CURRENT FILM */
+async function loadFilm() {
+  const id = getFilmIdFromURL();
+
+  if (!id) {
+    filmTitleEl.textContent = "Film not found";
+    playerMessage.textContent = "No film ID provided.";
+    downloadBtn.hidden = true;
+    return;
+  }
+
+  const film = FREE_FILMS.find(
+    item => String(item.id) === String(id)
+  );
+
+  if (!film) {
+    filmTitleEl.textContent = "Film not found";
+    filmDescEl.textContent =
+      "This film may have been removed or the link is incorrect.";
+
+    playerMessage.textContent = "Nothing to play.";
+    downloadBtn.hidden = true;
+
+    renderComments(id);
+    renderSideFilms(id);
+    return;
+  }
+
+  document.title = film.title + " | OSAMA MOVIES";
+  filmTitleEl.textContent = film.title || "Untitled Film";
+
+  filmMetaEl.innerHTML = `
+    <span class="meta-chip">
+      📅 ${escapeHtml(film.year || "Unknown")}
+    </span>
+
+    <span class="meta-chip">
+      🌍 ${escapeHtml(film.category || "Movie")}
+    </span>
+
+    ${film.trending ? '<span class="meta-chip">🔥 Trending</span>' : ""}
+  `;
+
+  filmDescEl.textContent = film.description || "";
+
+  const posterSrc = await resolvePoster(film);
+
+  if (film.videoUrl) {
+    if (film.videoUrl.startsWith("local:") || film.isLocal) {
+      try {
+        const blob = await getVideoBlob(film.id);
+
+        if (!blob) {
+          playerMessage.textContent =
+            "Uploaded video not found in this browser.";
+          return;
+        }
+
+        const videoURL = URL.createObjectURL(blob);
+
+        downloadBtn.href = videoURL;
+        downloadBtn.download = slug(film.title) + ".mp4";
+        downloadBtn.hidden = false;
+
+        await mountPlayer(videoURL,posterSrc);
+
+      } catch(error) {
+        console.error(error);
+        playerMessage.textContent =
+          "Could not load the uploaded video.";
+      }
+
+    } else {
+      downloadBtn.href = film.videoUrl;
+      downloadBtn.download = slug(film.title) + ".mp4";
+      downloadBtn.hidden = false;
+
+      await mountPlayer(film.videoUrl,posterSrc);
+    }
+
+  } else {
+    downloadBtn.hidden = true;
+    playerMessage.textContent =
+      "No video source available for this film.";
+  }
+
+  renderComments(film.id);
+  renderSideFilms(film.id);
+}
+
+/* START */
+loadFilm();
+</script>
+
+</body>
+</html>

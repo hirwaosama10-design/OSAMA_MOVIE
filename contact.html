@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | Osama Movies</title>
+<!-- Browser Tab Logo (Favicon) -->
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#080d18;color:white;line-height:1.6}
+header{background:#111b2c;padding:18px 7%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;border-bottom:1px solid #263750}
+.logo{font-size:25px;font-weight:bold;color:white;text-decoration:none}
+.logo span{color:#087bff}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{color:#ddd;text-decoration:none}
+nav a:hover,nav a.active{color:#39aaff}
+.hero{text-align:center;padding:65px 20px;background:radial-gradient(circle at top,#123b70,transparent 70%)}
+.hero h1{font-size:45px;margin-bottom:12px}
+.hero h1 span{color:#087bff}
+.hero p{color:#aab5c5;max-width:550px;margin:auto}
+.container{max-width:1100px;margin:auto;padding:35px 20px 70px}
+.grid{display:grid;grid-template-columns:.85fr 1.4fr;gap:25px}
+.panel{background:#111b2c;border:1px solid #263750;border-radius:15px;padding:28px}
+h2{margin-bottom:12px}
+.muted{color:#aab5c5;font-size:14px}
+.info{display:flex;gap:15px;align-items:center;margin:25px 0}
+.icon{background:#092c56;padding:13px;border-radius:10px;font-size:22px}
+.info a{color:#aab5c5;text-decoration:none}
+.info a:hover{color:#39aaff}
+.social{display:flex;gap:12px;margin-top:20px}
+.social a{background:#1c2d45;color:white;text-decoration:none;padding:12px;border-radius:8px}
+.social a:hover{background:#087bff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.form-group{margin-top:18px}
+label{display:block;margin-bottom:8px;font-weight:bold;font-size:14px}
+input,select,textarea{width:100%;padding:13px;background:#080d18;border:1px solid #34445c;border-radius:8px;color:white;font-size:14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#087bff}
+textarea{min-height:140px;resize:vertical}
+button{width:100%;padding:14px;background:#087bff;color:white;border:0;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:20px}
+button:hover{background:#0053c7}
+#status{margin-top:18px;color:#65d9a1;overflow-wrap:anywhere}
+.response{margin-top:25px;text-align:center;padding:30px;background:#111b2c;border:1px solid #263750;border-radius:15px}
+.response p{color:#aab5c5;margin:10px 0 20px}
+.response button{display:inline-block;background:#087bff;color:white;padding:12px 22px;border-radius:8px;text-decoration:none;width:auto;margin-top:0;}
+footer{text-align:center;background:#050a13;padding:30px 15px;color:#aab5c5}
+footer span{color:#087bff}
+footer a{color:#39aaff;text-decoration:none}
+@media(max-width:750px){.grid{grid-template-columns:1fr}header{justify-content:center}nav{justify-content:center}}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;gap:0}.hero h1{font-size:35px}.panel{padding:20px}}
+
+/* ✅ MODAL STYLES (Kuri Check Response) */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
+  left: 0; top: 0; 
+  width: 100%; height: 100%; 
+  background-color: rgba(0,0,0,0.8); 
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: #111b2c; 
+  border: 1px solid #34445c;
+  border-radius: 15px; 
+  padding: 30px; 
+  max-width: 500px; 
+  width: 90%; 
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.close-btn {
+  position: absolute; top: 15px; right: 20px;
+  font-size: 24px; color: #aab5c5; cursor: pointer;
+}
+.close-btn:hover { color: #087bff; }
+.msg-details{background:#080d18;padding:15px;border-radius:8px;border-left:3px solid #087bff;margin-bottom:15px; text-align:left;}
+.msg-details strong{color:#39aaff;}
+.reply-box{background:#0c1f38;padding:15px;border-radius:8px;border-left:3px solid #65d9a1; text-align:left;}
+.reply-box strong{color:#65d9a1;}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="logo">OSAMA <span>MOVIES</span></a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="index.html#movies">Movies</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" class="active">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Contact <span>Us</span></h1>
+    <p>Have a question, suggestion or problem? Contact the Osama Movies team. We are ready to hear from you.</p>
+</section>
+
+<main class="container">
+
+<div class="grid">
+
+<section class="panel">
+    <h2>Get In Touch</h2>
+    <p class="muted">You can reach us through the following channels.</p>
+
+    <div class="info">
+        <div class="icon">📧</div>
+        <div>
+            <strong>Email Address</strong>
+            <p class="muted">osama@example.com</p>
+        </div>
+    </div>
+
+    <div class="info">
+        <div class="icon">📱</div>
+        <div>
+            <strong>Phone Number</strong>
+            <p class="muted">+250 788 123 456</p>
+        </div>
+    </div>
+
+    <div class="info">
+        <div class="icon">🌍</div>
+        <div>
+            <strong>Location</strong>
+            <p class="muted">Rwanda, East Africa</p>
+        </div>
+    </div>
+
+    <div class="info">
+        <div class="icon">🕒</div>
+        <div>
+            <strong>Support Hours</strong>
+            <p class="muted">Monday - Saturday</p>
+        </div>
+    </div>
+
+    <h3>Follow Us</h3>
+    <div class="social">
+        <a href="https://facebook.com/" target="_blank">Facebook</a>
+        <a href="https://instagram.com/" target="_blank">Instagram</a>
+        <a href="https://tiktok.com/" target="_blank">TikTok</a>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Send Us A Message</h2>
+    <p class="muted">Complete the form below. Save your reference number after submission.</p>
+
+    <form id="contactForm">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Your email" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" required>
+                <option value="">Select subject</option>
+                <option>General Inquiry</option>
+                <option>Technical Support</option>
+                <option>Movie Request</option>
+                <option>Report a Problem</option>
+                <option>Suggestion</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" placeholder="Write your message..." required></textarea>
+        </div>
+
+        <button type="submit">Send Message ✉</button>
+        <div id="status" aria-live="polite"></div>
+
+    </form>
+</section>
+
+</div>
+
+<!-- ✅ HANO: Iyi ni buto ihinduye ijya muri Modal (Ntabwo ijya kuri page indi) -->
+<section class="response">
+    <h2>Already Sent a Message?</h2>
+    <p>Check whether the Osama Movies administrator has responded.</p>
+    <button onclick="openModal()">Check Admin Response →</button>
+</section>
+
+</main>
+
+<!-- ✅ MODAL YO KUREBA IGISUBIZO -->
+<div id="responseModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2 style="color:#39aaff; margin-bottom:15px;">Check Response</h2>
+    <div class="form-group">
+      <label for="refNum">Reference Number</label>
+      <input type="text" id="refNum" placeholder="e.g. OSM-12345678">
+    </div>
+    <button onclick="checkResponse()">🔍 Check Now</button>
+
+    <div id="modalResponseBox" style="margin-top:20px;">
+      <!-- Ibyavuye mu bushakashatsi bizaza hano -->
+    </div>
+  </div>
+</div>
+
+<footer>
+    <h2>OSAMA <span>MOVIES</span></h2>
+    <p>Your entertainment, your experience.</p>
+    <p>© 2026 Osama Movies. All Rights Reserved.</p>
+    <p><a href="index.html">Home</a> | <a href="contact.html">Contact</a></p>
+</footer>
+
+<script>
+// ✅ Iyi ni yo KEY ihuye na admin.html
+const MESSAGES_KEY = "osama_contact_messages"; 
+
+/* ============================================================
+   1) LOGIC YO KOOHEREZA UBUTUMWA
+   ============================================================ */
+const form = document.getElementById("contactForm");
+const statusBox = document.getElementById("status");
+
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const subject = document.getElementById("subject").value;
+    const message = document.getElementById("message").value.trim();
+
+    if (!name || !email || !subject || !message) {
+        statusBox.textContent = "Please complete all fields.";
+        return;
+    }
+
+    try {
+        const messages = JSON.parse(
+            localStorage.getItem(MESSAGES_KEY) || "[]"
+        );
+
+        const reference = "OSM-" +
+            Date.now().toString().slice(-8) +
+            Math.floor(Math.random() * 90 + 10);
+
+        messages.push({
+            id: reference,
+            name,
+            email,
+            subject,
+            message,
+            reply: "",
+            status: "pending", 
+            date: new Date().toISOString(),
+            repliedAt: ""
+        });
+
+        localStorage.setItem(
+            MESSAGES_KEY,
+            JSON.stringify(messages)
+        );
+
+        statusBox.replaceChildren();
+
+        const success = document.createElement("p");
+        success.textContent = "Your message was saved successfully!";
+        statusBox.appendChild(success);
+
+        const ref = document.createElement("strong");
+        ref.textContent = "Reference: " + reference;
+        statusBox.appendChild(ref);
+
+        const instruction = document.createElement("p");
+        instruction.textContent = "Save this reference number to check your response.";
+        statusBox.appendChild(instruction);
+
+        form.reset();
+
+    } catch (error) {
+        statusBox.textContent = "Unable to save your message. Please try again.";
+    }
+});
+
+/* ============================================================
+   2) LOGIC YO KUREBA IGISUBIZO (Muri Modal)
+   ============================================================ */
+function openModal() {
+    document.getElementById("responseModal").style.display = "flex";
+    document.getElementById("modalResponseBox").innerHTML = ""; // Siba ibisanzwe
+    document.getElementById("refNum").value = "";
+}
+
+function closeModal() {
+    document.getElementById("responseModal").style.display = "none";
+}
+
+function checkResponse() {
+    const refNum = document.getElementById("refNum").value.trim();
+    const box = document.getElementById("modalResponseBox");
+
+    if (!refNum) {
+        box.innerHTML = `<p style="color:#fca5a5; margin-top:10px;">Please enter your reference number.</p>`;
+        return;
+    }
+
+    try {
+        const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY) || "[]");
+        const myMsg = messages.find(m => m.id === refNum);
+
+        if (!myMsg) {
+            box.innerHTML = `<div class="msg-details" style="border-left-color:#dc2626; color:#fca5a5;"><strong>❌ Not Found</strong><p>No message found with that reference number.</p></div>`;
+            return;
+        }
+
+        const statusColor = myMsg.status === "replied" ? "#65d9a1" : "#ffc93c";
+        const statusText = myMsg.status === "replied" ? "Replied" : "Pending";
+
+        let html = `
+            <div class="msg-details">
+                <strong>Subject:</strong> ${myMsg.subject}<br>
+                <strong>Your Message:</strong><br> ${myMsg.message}<br>
+                <span class="muted" style="display:block; margin-top:5px;">Sent: ${new Date(myMsg.date).toLocaleString()}</span>
+            </div>
+            <h3 style="color:${statusColor}; margin-bottom:10px;">Status: ${statusText}</h3>
+        `;
+
+        if (myMsg.reply) {
+            html += `
+                <div class="reply-box">
+                    <strong>Admin Reply:</strong>
+                    <p style="margin-top:5px;">${myMsg.reply}</p>
+                    <span class="muted" style="display:block; margin-top:8px; font-size:12px;">Replied: ${new Date(myMsg.repliedAt).toLocaleString()}</span>
+                </div>
+            `;
+        } else {
+            html += `<p class="muted">Admin has not replied yet. Please check back later.</p>`;
+        }
+
+        box.innerHTML = html;
+
+    } catch (error) {
+        console.error(error);
+        box.innerHTML = `<p style="color:#fca5a5;">Error reading messages.</p>`;
+    }
+}
+
+// Kugira ngo iyo ukanze hanze ya modal ifunge
+window.onclick = function(event) {
+    const modal = document.getElementById("responseModal");
+    if (event.target === modal) {
+        closeModal();
+    }
+};
+</script>
+
+</body>
+</html>s

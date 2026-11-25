@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Dashboard | Osama Movies</title>
+  <!-- Browser Tab Logo (Favicon) -->
+<link rel="icon" type="image/png" href="logo.png">
+  <style>
+    :root {
+      --background: #080b14;
+      --surface: #121827;
+      --surface-light: #1b2437;
+      --surface-hover: #26334c;
+      --text: #f5f7ff;
+      --muted: #a9b3c9;
+      --blue: #2388ff;
+      --blue-dark: #0869d5;
+      --cyan: #30d5ff;
+      --green: #27c281;
+      --green-dark: #1ea36b;
+      --border: #29344a;
+      --border-light: #354260;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+      --shadow-md: 0 6px 20px rgba(0,0,0,0.35);
+      --transition: 0.22s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(35,136,255,0.10), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(48,213,255,0.08), transparent 45%);
+      z-index: -1;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; color: inherit; }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      transition: background var(--transition), transform var(--transition);
+    }
+    button:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #0c1220;
+      color: var(--text);
+      transition: border-color var(--transition);
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(35,136,255,0.18);
+    }
+    textarea { resize: vertical; }
+    input::placeholder, textarea::placeholder { color: #8490a8; }
+
+    [hidden] { display: none !important; }
+
+    .secondary-button { background: var(--surface-light); border: 1px solid var(--border); }
+    .secondary-button:hover { background: var(--surface-hover); }
+    .delete-button {
+      background: #dc2626;
+      color: #fff;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+    }
+    .delete-button:hover { background: #b91c1c; }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .small-note { color: var(--muted); font-size: 0.85rem; margin-top: 12px; }
+    .section-description { color: var(--muted); margin-bottom: 20px; max-width: 640px; }
+    .status-message { min-height: 24px; color: var(--muted); margin: 10px 0; }
+
+    /* LOGIN */
+    .admin-login {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 20px;
+    }
+    .admin-login-card {
+      max-width: 440px;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 40px 32px;
+      box-shadow: var(--shadow-md);
+    }
+    .login-logo { font-size: 3rem; text-align: center; margin-bottom: 12px; }
+    .admin-login-card h1 { font-size: 1.8rem; margin-bottom: 8px; text-align: center; }
+    .admin-login-card .section-description { text-align: center; margin-bottom: 24px; }
+    .admin-login-card .eyebrow { text-align: center; }
+
+    .add-form { display: grid; gap: 10px; }
+    .add-form label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      cursor: pointer;
+      margin: 4px 0 8px;
+    }
+    .checkbox-row input { width: auto; accent-color: var(--blue); }
+
+    /* SHELL */
+    .admin-shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+    .admin-sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .admin-brand {
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: var(--text);
+      margin-bottom: 28px;
+      padding: 0 10px;
+    }
+    .admin-brand span { color: var(--cyan); }
+
+    .admin-menu { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      transition: background var(--transition), color var(--transition);
+    }
+    .menu-item:hover { background: var(--surface-light); color: var(--text); }
+    .menu-item.active { background: var(--blue); color: #fff; }
+
+    .sidebar-footer { border-top: 1px solid var(--border); padding-top: 14px; }
+    .logout-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--surface-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .logout-btn:hover { background: #dc2626; border-color: #dc2626; color: #fff; transform: none; }
+
+    .admin-main { padding: 30px 40px 60px; overflow-x: hidden; }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .admin-header h1 { font-size: 1.8rem; }
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .stat-card:hover { border-color: var(--cyan); transform: translateY(-2px); }
+    .stat-icon { font-size: 2rem; }
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .stat-value { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+
+    /* PANELS */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .panel h2 { font-size: 1.2rem; margin-bottom: 16px; }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .panel-head h2 { margin: 0; }
+    .panel-head input { max-width: 260px; }
+
+    /* RECENT */
+    .recent-list { display: flex; flex-direction: column; gap: 10px; }
+    .recent-item {
+      display: grid;
+      grid-template-columns: 46px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-light);
+    }
+    .recent-poster {
+      width: 46px;
+      height: 62px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--background);
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+    }
+    .recent-poster img { width: 100%; height: 100%; object-fit: cover; }
+    .recent-info strong { display: block; margin-bottom: 2px; font-size: 0.92rem; }
+    .recent-info p { font-size: 0.78rem; color: var(--muted); }
+    .recent-view { font-size: 0.8rem; color: var(--cyan); font-weight: 700; white-space: nowrap; }
+
+    /* QUICK */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .action-card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 18px;
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+    }
+    .action-card:hover {
+      border-color: var(--cyan);
+      background: var(--surface-hover);
+      transform: translateY(-2px);
+    }
+    .action-card span { font-size: 1.5rem; }
+    .action-card strong { font-size: 0.95rem; }
+    .action-card p { font-size: 0.78rem; color: var(--muted); }
+
+    /* FILM TABLE */
+    .film-table { display: flex; flex-direction: column; gap: 10px; }
+    .film-row {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 12px;
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition);
+    }
+    .film-row:hover { border-color: var(--blue); }
+    .film-thumb {
+      width: 60px;
+      height: 85px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--background);
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+    }
+    .film-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .film-info strong { display: block; font-size: 1rem; margin-bottom: 2px; }
+    .film-info p { font-size: 0.82rem; color: var(--muted); }
+    .film-desc {
+      margin-top: 4px !important;
+      font-size: 0.78rem !important;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .film-actions { display: flex; gap: 6px; }
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-sm);
+      background: var(--surface-hover);
+      color: var(--text);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all var(--transition);
+    }
+    .icon-btn:hover { transform: translateY(-1px); }
+    .icon-btn.edit:hover { background: var(--blue); border-color: var(--blue); }
+    .icon-btn.view:hover { background: var(--green); border-color: var(--green); }
+    .icon-btn.delete:hover { background: #dc2626; border-color: #dc2626; }
+
+    /* FORM */
+    .admin-add-form { max-width: 720px; }
+    .form-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .form-field { display: flex; flex-direction: column; }
+
+    .poster-preview-box { margin: 10px 0; }
+    .poster-preview {
+      width: 140px;
+      height: 210px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-light);
+      border: 1px dashed var(--border-light);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      overflow: hidden;
+      text-align: center;
+      padding: 6px;
+    }
+    .poster-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+    .video-source {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px 18px;
+      margin: 6px 0;
+      display: grid;
+      gap: 10px;
+    }
+    .video-source legend {
+      padding: 0 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .radio-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition);
+    }
+    .radio-row:hover { background: var(--surface-light); }
+    .radio-row input[type="radio"] {
+      accent-color: var(--blue);
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    #uploadGroup input[type="file"],
+    #posterUploadGroup input[type="file"],
+    #castImageGroup input[type="file"],
+    #trailerUploadGroup input[type="file"] {
+      padding: 10px;
+      background: #0c1220;
+      border: 1px dashed var(--border-light);
+      border-radius: var(--radius-sm);
+      width: 100%;
+      cursor: pointer;
+    }
+    #uploadGroup input[type="file"]:hover,
+    #posterUploadGroup input[type="file"]:hover,
+    #castImageGroup input[type="file"]:hover,
+    #trailerUploadGroup input[type="file"]:hover { border-color: var(--cyan); }
+
+    .form-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .form-buttons button { flex: 1; min-width: 140px; }
+
+    .danger-zone { border-color: #7f1d1d; }
+    .danger-zone h2 { color: #fca5a5; }
+
+    #adminLoadMoreWrap {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #adminLoadMoreBtn {
+      padding: 14px 40px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    #adminLoadMoreBtn:hover {
+      background: var(--blue-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* MESSAGES STYLES */
+    .message-list { display: flex; flex-direction: column; gap: 16px; }
+    .message-card {
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+    }
+    .status-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .status-pending { background: rgba(255, 201, 60, 0.15); color: #ffc93c; border: 1px solid #ffc93c; }
+    .status-replied { background: rgba(39, 194, 129, 0.15); color: var(--green); border: 1px solid var(--green); }
+    
+    .msg-header { margin-bottom: 15px; padding-right: 100px; }
+    .msg-sender { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+    .msg-email { font-size: 0.85rem; color: var(--muted); }
+    .msg-date { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+    
+    .msg-content {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      border-left: 3px solid var(--border-light);
+    }
+    
+    .reply-section {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 10px;
+    }
+    .reply-label { font-size: 0.85rem; font-weight: 700; color: var(--muted); margin-bottom: 8px; display: block; }
+    .reply-textarea { width: 100%; padding: 12px; background: var(--surface-light); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); resize: vertical; min-height: 80px; margin-bottom: 12px; }
+    .reply-textarea:focus { outline: none; border-color: var(--blue); }
+    .reply-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-reply { background: var(--blue); color: white; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.85rem; }
+    .btn-reply:hover { background: var(--blue-dark); }
+    .btn-update { background: var(--green); color: white; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.85rem; }
+    .btn-update:hover { background: var(--green-dark); }
+
+    /* ✅ FLAGS / TAGS */
+    .flag-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 14px 16px;
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin: 6px 0 8px;
+    }
+    .flag-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 6px 12px;
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      transition: all var(--transition);
+    }
+    .flag-item:hover { border-color: var(--cyan); background: var(--surface-hover); }
+    .flag-item input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--blue);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .flag-item.checked {
+      background: rgba(35, 136, 255, 0.15);
+      border-color: var(--blue);
+    }
+
+    /* ✅ GENRE GROUP (categorical genres) */
+    .genre-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px;
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin: 6px 0 8px;
+    }
+    .genre-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 8px 16px;
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      transition: all var(--transition);
+      user-select: none;
+    }
+    .genre-item:hover { border-color: var(--cyan); background: var(--surface-hover); }
+    .genre-item input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--blue);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .genre-item.checked {
+      background: rgba(35, 136, 255, 0.15);
+      border-color: var(--blue);
+      color: #fff;
+    }
+    .genre-item.genre-action.checked { border-color: #ff6b35; background: rgba(255, 107, 53, 0.15); }
+    .genre-item.genre-horror.checked { border-color: #a855f7; background: rgba(168, 85, 247, 0.15); }
+    .genre-item.genre-drama.checked { border-color: #3b82f6; background: rgba(59, 130, 246, 0.15); }
+    .genre-item.genre-comedy.checked { border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
+    .genre-item.genre-adventure.checked { border-color: #10b981; background: rgba(16, 185, 129, 0.15); }
+    .genre-item.genre-other.checked { border-color: #64748b; background: rgba(100, 116, 139, 0.15); }
+
+    /* Genre pills on film rows */
+    .genre-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .genre-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .genre-pill.action { background: rgba(255, 107, 53, 0.2); color: #ff6b35; border: 1px solid #ff6b35; }
+    .genre-pill.horror { background: rgba(168, 85, 247, 0.2); color: #a855f7; border: 1px solid #a855f7; }
+    .genre-pill.drama { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+    .genre-pill.comedy { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+    .genre-pill.adventure { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+    .genre-pill.other { background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid #64748b; }
+
+    /* Trailer badge on film rows */
+    .trailer-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(48, 213, 255, 0.15);
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      margin-top: 6px;
+    }
+
+    /* Messages Responsive */
+    @media (max-width: 650px) {
+      .status-badge { position: relative; top: 0; right: 0; display: inline-block; margin-bottom: 10px; }
+      .msg-header { padding-right: 0; }
+      .reply-actions { flex-direction: column; }
+      .btn-reply, .btn-update { width: 100%; }
+    }
+
+    @media (max-width: 900px) {
+      .admin-shell { grid-template-columns: 1fr; }
+      .admin-sidebar {
+        position: relative;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        padding: 14px;
+        overflow-x: auto;
+      }
+      .admin-brand { margin-bottom: 0; margin-right: 16px; white-space: nowrap; }
+      .admin-menu { flex-direction: row; flex: 1; }
+      .menu-item { white-space: nowrap; padding: 10px 12px; font-size: 0.85rem; }
+      .sidebar-footer { border-top: none; padding-top: 0; padding-left: 10px; }
+      .logout-btn { width: auto; padding: 10px 14px; white-space: nowrap; }
+      .admin-main { padding: 20px; }
+      .form-row, .form-row-3 { grid-template-columns: 1fr; }
+      .film-row { grid-template-columns: 46px 1fr; }
+      .film-actions { grid-column: 1 / -1; justify-content: flex-end; }
+      .film-thumb { width: 46px; height: 65px; }
+      .admin-header h1 { font-size: 1.4rem; }
+      .recent-item { grid-template-columns: 46px 1fr; }
+      .recent-view { grid-column: 1 / -1; text-align: right; }
+      .flag-group { gap: 10px; }
+      .flag-item { font-size: 0.8rem; padding: 5px 10px; }
+      .genre-group { gap: 8px; padding: 12px; }
+      .genre-item { font-size: 0.8rem; padding: 6px 12px; }
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .main-footer {
+        background: #061b42;
+        color: white;
+        padding: 50px 7% 15px;
+        font-family: Arial, sans-serif;
+        margin-top: auto;
+    }
+    .footer-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 35px;
+        max-width: 1200px;
+        margin: auto;
+    }
+    .footer-section h3 {
+        color: #ffffff;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #1685ff;
+        display: inline-block;
+        padding-bottom: 8px;
+    }
+    .footer-logo {
+        color: #ffffff;
+        font-size: 25px;
+        font-weight: bold;
+    }
+    .footer-logo span { color: #1685ff; }
+    .footer-section p { color: #c5d4eb; line-height: 1.7; }
+    .footer-section ul { list-style: none; padding: 0; }
+    .footer-section ul li { margin-bottom: 12px; }
+    .footer-section a { color: #c5d4eb; text-decoration: none; transition: 0.3s; }
+    .footer-section a:hover { color: #1685ff; padding-left: 5px; }
+    .social-links { display: flex; flex-direction: column; gap: 13px; }
+    .footer-bottom {
+        border-top: 1px solid #29466e;
+        margin-top: 40px;
+        padding-top: 20px;
+        text-align: center;
+        color: #c5d4eb;
+        font-size: 14px;
+    }
+    .footer-bottom strong { color: #1685ff; }
+    
+    @media (max-width: 768px) {
+        .footer-container { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+        .footer-container { grid-template-columns: 1fr; }
+        .main-footer { padding: 35px 7% 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <section id="loginGate" class="admin-login">
+    <div class="admin-login-card">
+      <div class="login-logo">🎬</div>
+      <p class="eyebrow">OSAMA MOVIES</p>
+      <h1>Admin Login</h1>
+      <p class="section-description">Enter your password to access the dashboard.</p>
+
+      <form id="loginForm" class="add-form">
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" placeholder="Enter password"
+               required autocomplete="current-password">
+        <label class="checkbox-row">
+          <input type="checkbox" id="rememberMe">
+          <span>Remember me on this device</span>
+        </label>
+        <button type="submit">🔓 Unlock Dashboard</button>
+        <p id="loginMessage" class="status-message" aria-live="polite"></p>
+      </form>
+
+      <p class="small-note" style="text-align:center;">
+        Default password: <code>osama123</code>
+      </p>
+    </div>
+  </section>
+
+  <div id="adminShell" class="admin-shell" hidden>
+
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="index.html">OSAMA <span>MOVIES</span></a>
+      <nav class="admin-menu">
+        <button class="menu-item active" data-view="dashboard">📊 Dashboard</button>
+        <button class="menu-item" data-view="films">🎬 Films</button>
+        <button class="menu-item" data-view="add">➕ Add Film</button>
+        <button class="menu-item" data-view="messages">📩 Inbox</button>
+        <button class="menu-item" data-view="comments">💬 Comments</button>
+        <button class="menu-item" data-view="settings">⚙️ Settings</button>
+        <a class="menu-item" href="index.html" target="_blank" rel="noopener">🌐 View Site ↗</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="logout-btn" type="button">🚪 Log Out</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow" id="viewEyebrow">OVERVIEW</p>
+          <h1 id="viewTitle">Dashboard</h1>
+        </div>
+        <div class="admin-header-actions">
+          <span class="status-dot"></span>
+          <span id="headerDate"></span>
+        </div>
+      </header>
+
+      <!-- DASHBOARD -->
+      <section class="admin-view" id="view-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-icon">🎬</span>
+            <div><p class="stat-label">Total Films</p><p class="stat-value" id="statTotal">0</p></div>
+          </div>
+          <div class="stat-card"><span class="stat-icon">🔗</span>
+            <div><p class="stat-label">Video Links</p><p class="stat-value" id="statLinks">0</p></div>
+          </div>
+          <div class="stat-card"><span class="stat-icon">📤</span>
+            <div><p class="stat-label">Uploaded Videos</p><p class="stat-value" id="statUploads">0</p></div>
+          </div>
+          <div class="stat-card"><span class="stat-icon">🖼️</span>
+            <div><p class="stat-label">With Poster</p><p class="stat-value" id="statPosters">0</p></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>🕐 Recently Added</h2>
+          <div id="recentFilms" class="recent-list"></div>
+        </div>
+
+        <div class="panel">
+          <h2>⚡ Quick Actions</h2>
+          <div class="quick-actions">
+            <button class="action-card" data-view="add">
+              <span>➕</span><strong>Add New Film</strong><p>Upload or paste a video</p>
+            </button>
+            <button class="action-card" data-view="films">
+              <span>📋</span><strong>Manage Films</strong><p>Edit or delete films</p>
+            </button>
+            <button class="action-card" data-view="messages">
+              <span>📩</span><strong>View Messages</strong><p>Read & Reply to users</p>
+            </button>
+            <button class="action-card" id="resetDemoBtn">
+              <span>↻</span><strong>Reset Library</strong><p>Restore demo films</p>
+            </button>
+            <a class="action-card" href="index.html" target="_blank" rel="noopener">
+              <span>🌐</span><strong>Visit Site</strong><p>See it live</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FILMS -->
+      <section class="admin-view" id="view-films" hidden>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>🎬 All Films</h2>
+            <input type="search" id="filmSearchInput" placeholder="🔍 Search films...">
+          </div>
+          <p id="manageMessage" class="status-message">Loading...</p>
+          <div id="adminFilmList" class="film-table"></div>
+
+          <div id="adminLoadMoreWrap" hidden>
+            <button id="adminLoadMoreBtn" type="button">⬇ Load More Films</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADD / EDIT -->
+      <section class="admin-view" id="view-add" hidden>
+        <div class="panel">
+          <h2 id="formHeading">➕ Add a New Film</h2>
+          <p class="section-description">
+            Fill in details. You can <strong>upload a poster</strong> or <strong>paste a poster URL</strong>.
+            For video, <strong>upload a file</strong> or <strong>paste a URL</strong>.
+          </p>
+
+          <form id="addFilmForm" class="add-form admin-add-form">
+            <input type="hidden" id="editId">
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="newTitle">Film Title *</label>
+                <input id="newTitle" type="text" placeholder="e.g. Big Buck Bunny" required>
+              </div>
+              <div class="form-field">
+                <label for="newYear">Release Year</label>
+                <input id="newYear" type="number" min="1888" max="2100" placeholder="2026">
+              </div>
+            </div>
+
+            <div class="form-row-3">
+              <div class="form-field">
+                <label for="newCategory">Category (Country)</label>
+                <select id="newCategory">
+                  <option value="Other">🌍 Other</option>
+                  <option value="Indian">🇮🇳 Indian</option>
+                  <option value="Chinese">🇨🇳 Chinese</option>
+                  <option value="Hollywood">🇺🇸 Hollywood</option>
+                  <option value="Korean">🇰🇷 Korean</option>
+                  <option value="African">🌍 African</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="newType">Content Type</label>
+                <select id="newType" onchange="toggleEpisodeFields()">
+                  <option value="Movie">🎬 Movie</option>
+                  <option value="Episode">📺 Episode / Series</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Episode Details (Hidden by default) -->
+            <div id="episodeFields" class="form-row" hidden style="margin-bottom: 10px;">
+              <div class="form-field">
+                <label for="newSeason">Season Number</label>
+                <input id="newSeason" type="number" min="1" placeholder="e.g. 1">
+              </div>
+              <div class="form-field">
+                <label for="newEpisode">Episode Number</label>
+                <input id="newEpisode" type="number" min="1" placeholder="e.g. 5">
+              </div>
+            </div>
+
+            <!-- ============================================================
+                 ✅ FILM STATUS & TAGS (Trending / New Release)
+                 ============================================================ -->
+            <label style="margin-top: 4px;">Film Status &amp; Tags</label>
+            <div class="flag-group" id="flagGroup">
+              <label class="flag-item" id="flagTrending">
+                <input type="checkbox" id="newTrending" value="trending">
+                <span>🔥 Trending</span>
+              </label>
+              <label class="flag-item" id="flagNew">
+                <input type="checkbox" id="newNew" value="new">
+                <span>🆕 New Release</span>
+              </label>
+            </div>
+
+            <!-- ============================================================
+                 ✅ GENRES / CATEGORIES (Drama / Comedy / Action / Adventure / Horror)
+                 ============================================================ -->
+            <label style="margin-top: 4px;">Genre / Categories <span style="color:var(--cyan);font-weight:600;text-transform:none;font-size:0.78rem;">(select all that apply)</span></label>
+            <div class="genre-group" id="genreGroup">
+              <label class="genre-item genre-drama" id="genreDrama">
+                <input type="checkbox" id="newGenreDrama" value="drama">
+                <span>🎭 Drama</span>
+              </label>
+              <label class="genre-item genre-comedy" id="genreComedy">
+                <input type="checkbox" id="newGenreComedy" value="comedy">
+                <span>😂 Comedy</span>
+              </label>
+              <label class="genre-item genre-action" id="genreAction">
+                <input type="checkbox" id="newGenreAction" value="action">
+                <span>💥 Action</span>
+              </label>
+              <label class="genre-item genre-adventure" id="genreAdventure">
+                <input type="checkbox" id="newGenreAdventure" value="adventure">
+                <span>🧭 Adventure</span>
+              </label>
+              <label class="genre-item genre-horror" id="genreHorror">
+                <input type="checkbox" id="newGenreHorror" value="horror">
+                <span>👻 Horror</span>
+              </label>
+              <label class="genre-item genre-other" id="genreOther">
+                <input type="checkbox" id="newGenreOther" value="other">
+                <span>📁 Other</span>
+              </label>
+            </div>
+
+            <!-- Poster -->
+            <fieldset class="video-source">
+              <legend>🖼️ Poster Image</legend>
+              <label class="radio-row">
+                <input type="radio" name="posterSource" value="url" checked>
+                <span>🔗 Paste a poster URL (HTTPS)</span>
+              </label>
+              <label class="radio-row">
+                <input type="radio" name="posterSource" value="upload">
+                <span>📤 Upload poster from this device (JPG / PNG / WEBP)</span>
+              </label>
+
+              <div id="posterUrlGroup">
+                <input id="newPoster" type="url" placeholder="https://example.com/poster.jpg">
+              </div>
+
+              <div id="posterUploadGroup" hidden>
+                <input id="newPosterFile" type="file" accept="image/jpeg,image/png,image/webp">
+                <p id="posterUploadInfo" class="small-note">No poster selected. Recommended size ≈ 300×450 px.</p>
+              </div>
+            </fieldset>
+
+            <div class="poster-preview-box">
+              <div id="posterPreview" class="poster-preview"><span>Poster preview</span></div>
+            </div>
+
+            <!-- Video -->
+            <fieldset class="video-source">
+              <legend>🎥 Video Source</legend>
+              <label class="radio-row">
+                <input type="radio" name="videoSource" value="url" checked>
+                <span>🔗 Paste a video URL (.mp4 / .webm)</span>
+              </label>
+              <label class="radio-row">
+                <input type="radio" name="videoSource" value="upload">
+                <span>📤 Upload video from this device (MP4 / WebM)</span>
+              </label>
+
+              <div id="urlGroup">
+                <input id="newVideo" type="url" placeholder="https://example.com/video.mp4">
+              </div>
+
+              <div id="uploadGroup" hidden>
+                <input id="newVideoFile" type="file" accept="video/mp4,video/webm">
+                <p id="uploadInfo" class="small-note">No file selected. Max ≈ 200 MB.</p>
+              </div>
+            </fieldset>
+
+            <!-- ============================================================
+                 ✅ NEW: TRAILER VIDEO SECTION
+                 ============================================================ -->
+            <fieldset class="video-source">
+              <legend>🎬 Trailer Video (Optional)</legend>
+              <label class="radio-row">
+                <input type="radio" name="trailerSource" value="url" checked>
+                <span>🔗 Paste a trailer URL (.mp4 / .webm)</span>
+              </label>
+              <label class="radio-row">
+                <input type="radio" name="trailerSource" value="upload">
+                <span>📤 Upload trailer from this device (MP4 / WebM)</span>
+              </label>
+              <label class="radio-row">
+                <input type="radio" name="trailerSource" value="none">
+                <span>🚫 No trailer for this film</span>
+              </label>
+
+              <div id="trailerUrlGroup">
+                <input id="newTrailer" type="url" placeholder="https://example.com/trailer.mp4">
+              </div>
+
+              <div id="trailerUploadGroup" hidden>
+                <input id="newTrailerFile" type="file" accept="video/mp4,video/webm">
+                <p id="trailerUploadInfo" class="small-note">No trailer file selected. Max ≈ 100 MB.</p>
+              </div>
+            </fieldset>
+
+            <label for="newDescription">Description</label>
+            <textarea id="newDescription" rows="4" placeholder="Short description..."></textarea>
+
+            <!-- ✅ CAST SECTION -->
+            <fieldset class="video-source" style="margin-top: 15px;">
+              <legend>🎭 Abasobanuzi (Cast)</legend>
+              
+              <label for="newCast">Names of Actors (Separated by comma)</label>
+              <input id="newCast" type="text" placeholder="e.g. Leonardo DiCaprio, Tom Hardy">
+              
+              <label for="newCastBio">Actor Bio / Info (Optional)</label>
+              <textarea id="newCastBio" rows="3" placeholder="Brief info about the actors..."></textarea>
+
+              <!-- Ifoto y'umukinnyi -->
+              <div id="castImageGroup" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: var(--radius-sm); border: 1px dashed var(--border); margin-top: 10px;">
+                <label style="color: var(--blue); margin-bottom: 8px;">Actor Profile Image</label>
+                
+                <div id="currentCastImagePreview" style="display: none; margin-bottom: 10px; align-items: center; gap: 10px;">
+                  <img id="castImgPreviewTag" src="" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--blue);" alt="Actor">
+                  <span style="font-size: 0.8rem; color: var(--muted);">Current Actor Image</span>
+                </div>
+
+                <label for="newCastImage" style="font-size: 0.75rem; text-transform: none; color: var(--text);">Upload New Image (Replaces current)</label>
+                <input id="newCastImage" type="file" accept="image/jpeg,image/png,image/webp">
+                <p id="castImageUploadInfo" class="small-note" style="margin-top: 5px;">No new image selected.</p>
+              </div>
+              
+              <div style="margin-top: 10px;">
+                <label for="newCastImageUrl" style="font-size: 0.75rem; text-transform: none; color: var(--text);">Or paste Actor Image URL</label>
+                <input id="newCastImageUrl" type="url" placeholder="https://example.com/actor.jpg">
+              </div>
+            </fieldset>
+
+            <div class="form-buttons">
+              <button type="submit" id="submitBtn">✅ Publish Film</button>
+              <button type="button" id="cancelEditBtn" class="secondary-button" hidden>Cancel Edit</button>
+            </div>
+
+            <p id="addMessage" class="status-message" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- MESSAGES / INBOX VIEW -->
+      <section class="admin-view" id="view-messages" hidden>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>📩 User Messages</h2>
+            <input type="search" id="msgSearchInput" placeholder="🔍 Search messages...">
+          </div>
+          <p class="section-description">Manage contact form messages and reply to users.</p>
+          
+          <div id="messageList" class="message-list">
+            <!-- Messages will be injected here via JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- FILM COMMENTS VIEW -->
+      <section class="admin-view" id="view-comments" hidden>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>💬 User Film Comments</h2>
+            <input type="search" id="commentSearchInput" placeholder="🔍 Search comments...">
+          </div>
+          <p class="section-description">Read comments posted under films and reply as the administrator. Your reply will appear below the original comment on the film page.</p>
+          <div id="adminCommentList" class="message-list"></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="admin-view" id="view-settings" hidden>
+        <div class="panel">
+          <h2>⚙️ Site Settings</h2>
+          <p class="section-description">These settings are saved in your browser.</p>
+          <div class="add-form">
+            <label for="siteName">Site Name</label>
+            <input id="siteName" type="text" placeholder="Osama Movies">
+            <label for="siteTagline">Tagline</label>
+            <input id="siteTagline" type="text" placeholder="Watch free. Download free.">
+            <button type="button" id="saveSettingsBtn">💾 Save Settings</button>
+            <p id="settingsMessage" class="status-message"></p>
+          </div>
+        </div>
+
+        <div class="panel danger-zone">
+          <h2>⚠️ Danger Zone</h2>
+          <p class="section-description">These actions cannot be undone.</p>
+          <button id="clearAllBtn" class="delete-button" type="button">🗑 Delete All Films</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h2 class="footer-logo">OSAMA <span>MOVIES</span></h2>
+        <p>Your destination for discovering movies. Search films and enjoy your favorite entertainment.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#movies">Movies</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Categories</h3>
+        <ul>
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Comedy</a></li>
+          <li><a href="#">Drama</a></li>
+          <li><a href="#">Adventure</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">Instagram</a>
+          <a href="#" target="_blank">YouTube</a>
+          <a href="#" target="_blank">TikTok</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="yearNow"></span> OSAMA MOVIES. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* ============================================================
+       Toggle Episode Fields
+       ============================================================ */
+    function toggleEpisodeFields() {
+      const type = document.getElementById("newType").value;
+      const episodeFields = document.getElementById("episodeFields");
+      if (type === "Episode") {
+        episodeFields.hidden = false;
+      } else {
+        episodeFields.hidden = true;
+        document.getElementById("newSeason").value = "";
+        document.getElementById("newEpisode").value = "";
+      }
+    }
+
+    /* ============================================================
+       IndexedDB helper — stores video AND poster/actor blobs
+       ============================================================ */
+    const DB_NAME = "osama_movies_db";
+    const DB_VERSION = 2;
+    const STORE = "videos";
+    const POSTER_STORE = "posters";
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
+          if (!db.objectStoreNames.contains(POSTER_STORE)) db.createObjectStore(POSTER_STORE);
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function putBlob(store, id, blob) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(store, "readwrite");
+        tx.objectStore(store).put(blob, id);
+        tx.oncomplete = () => res(true);
+        tx.onerror = () => rej(tx.error);
+      });
+    }
+    async function getBlob(store, id) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(store, "readonly");
+        const req = tx.objectStore(store).get(id);
+        req.onsuccess = () => res(req.result || null);
+        req.onerror = () => rej(req.error);
+      });
+    }
+    async function deleteBlob(store, id) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(store, "readwrite");
+        tx.objectStore(store).delete(id);
+        tx.oncomplete = () => res(true);
+        tx.onerror = () => rej(tx.error);
+      });
+    }
+    async function listAllIds(store) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(store, "readonly");
+        const req = tx.objectStore(store).getAllKeys();
+        req.onsuccess = () => res(req.result || []);
+        req.onerror = () => rej(req.error);
+      });
+    }
+
+    const saveVideoBlob = (id, b) => putBlob(STORE, id, b);
+    const getVideoBlob  = (id)    => getBlob(STORE, id);
+    const deleteVideoBlob = (id)  => deleteBlob(STORE, id);
+    const listVideoIds  = ()      => listAllIds(STORE);
+
+    const savePosterBlob = (id, b) => putBlob(POSTER_STORE, id, b);
+    const getPosterBlob  = (id)    => getBlob(POSTER_STORE, id);
+    const deletePosterBlob = (id)  => deleteBlob(POSTER_STORE, id);
+    const listPosterIds  = ()      => listAllIds(POSTER_STORE);
+
+    /* ============================================================
+       Admin logic
+       ============================================================ */
+    const FILMS_KEY      = "osama_free_films";
+    const AUTH_KEY       = "osama_admin_auth";
+    const REMEMBER_KEY   = "osama_admin_remember";
+    const SETTINGS_KEY   = "osama_site_settings";
+    const MESSAGES_KEY   = "osama_contact_messages";
+    const ADMIN_PASSWORD = "osama123"; // ⚠️ CHANGE THIS!
+
+    const DEMO_FILMS = [
+      { id:"free-001", title:"Big Buck Bunny", year:"2008", category:"Other", type:"Movie",
+        poster:"https://peach.blender.org/wp-content/uploads/title_anouncement.jpg",
+        videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        trailerUrl:"",
+        description:"A giant rabbit deals with three bullying rodents.",
+        cast:"Leonardo DiCaprio, Tom Hardy", castImage:"",
+        trending: true, isNew: false, genres: ["action", "comedy"] },
+      { id:"free-002", title:"Sintel", year:"2010", category:"Other", type:"Movie",
+        poster:"https://durian.blender.org/wp-content/uploads/2010/06/sintel_poster.jpg",
+        videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        trailerUrl:"",
+        description:"A lonely young woman travels in search of her lost dragon.",
+        cast:"Scarlett Johansson", castImage:"",
+        trending: true, isNew: false, genres: ["drama", "adventure"] },
+      { id:"free-003", title:"Elephants Dream", year:"2006", category:"Other", type:"Movie",
+        poster:"https://orange.blender.org/wp-content/themes/orange/images/header.jpg",
+        videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        trailerUrl:"",
+        description:"Two strange characters explore a mechanical world.",
+        cast:"Robert Downey Jr., Chris Evans", castImage:"",
+        trending: false, isNew: true, genres: ["horror", "drama"] },
+      { id:"free-004", title:"Tears of Steel", year:"2012", category:"Other", type:"Movie",
+        poster:"https://mango.blender.org/wp-content/uploads/2013/05/tears_of_steel_poster.jpg",
+        videoUrl:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        trailerUrl:"",
+        description:"Warriors and scientists try to save the world.",
+        cast:"Chris Hemsworth", castImage:"",
+        trending: false, isNew: true, genres: ["action", "adventure"] }
+    ];
+
+    const $ = id => document.getElementById(id);
+
+    const loginGate = $("loginGate");
+    const adminShell = $("adminShell");
+    const loginForm = $("loginForm");
+    const loginMessage = $("loginMessage");
+    const logoutBtn = $("logoutBtn");
+    const rememberMe = $("rememberMe");
+
+    const addFilmForm = $("addFilmForm");
+    const formHeading = $("formHeading");
+    const submitBtn = $("submitBtn");
+    const cancelEditBtn = $("cancelEditBtn");
+    const addMessage = $("addMessage");
+
+    const editId = $("editId");
+    const newTitle = $("newTitle");
+    const newYear = $("newYear");
+    
+    const newCategory = $("newCategory");
+    const newType = $("newType");
+    const newSeason = $("newSeason");
+    const newEpisode = $("newEpisode");
+    const newCast = $("newCast");
+    const newCastBio = $("newCastBio");
+    const newCastImage = $("newCastImage");
+    const newCastImageUrl = $("newCastImageUrl");
+    const castImageUploadInfo = $("castImageUploadInfo");
+
+    /* ✅ FLAGS (Trending / New) */
+    const newTrending = $("newTrending");
+    const newNew = $("newNew");
+
+    /* ✅ GENRES (Drama / Comedy / Action / Adventure / Horror / Other) */
+    const newGenreDrama = $("newGenreDrama");
+    const newGenreComedy = $("newGenreComedy");
+    const newGenreAction = $("newGenreAction");
+    const newGenreAdventure = $("newGenreAdventure");
+    const newGenreHorror = $("newGenreHorror");
+    const newGenreOther = $("newGenreOther");
+
+    /* ✅ TRAILER elements */
+    const trailerUrlGroup = $("trailerUrlGroup");
+    const trailerUploadGroup = $("trailerUploadGroup");
+    const trailerRadioUrls = document.querySelectorAll('input[name="trailerSource"]');
+    const newTrailer = $("newTrailer");
+    const newTrailerFile = $("newTrailerFile");
+    const trailerUploadInfo = $("trailerUploadInfo");
+
+    const newPoster = $("newPoster");
+    const newPosterFile = $("newPosterFile");
+    const posterUploadInfo = $("posterUploadInfo");
+    const newVideo = $("newVideo");
+    const newVideoFile = $("newVideoFile");
+    const uploadInfo = $("uploadInfo");
+    const newDescription = $("newDescription");
+    const posterPreview = $("posterPreview");
+
+    const posterUrlGroup = $("posterUrlGroup");
+    const posterUploadGroup = $("posterUploadGroup");
+    const posterRadioUrls = document.querySelectorAll('input[name="posterSource"]');
+
+    const urlGroup = $("urlGroup");
+    const uploadGroup = $("uploadGroup");
+    const radioUrls = document.querySelectorAll('input[name="videoSource"]');
+
+    const adminFilmList = $("adminFilmList");
+    const manageMessage = $("manageMessage");
+    const filmSearchInput = $("filmSearchInput");
+    const resetDemoBtn = $("resetDemoBtn");
+    const clearAllBtn = $("clearAllBtn");
+
+    const siteName = $("siteName");
+    const siteTagline = $("siteTagline");
+    const saveSettingsBtn = $("saveSettingsBtn");
+    const settingsMessage = $("settingsMessage");
+
+    const viewTitle = $("viewTitle");
+    const viewEyebrow = $("viewEyebrow");
+
+    let films = loadFilms();
+    let messages = [];
+    let selectedVideoFile = null;
+    let selectedPosterFile = null;
+    let selectedCastImageFile = null;
+    let selectedTrailerFile = null;
+    let currentView = "dashboard";
+
+    /* ---------- ADMIN PAGINATION ---------- */
+    const ADMIN_PER_PAGE = 10;
+    let adminPage = 1;
+    let adminList = [];
+
+    function loadFilms() {
+      try {
+        const raw = localStorage.getItem(FILMS_KEY);
+        if (!raw) {
+          localStorage.setItem(FILMS_KEY, JSON.stringify(DEMO_FILMS));
+          return [...DEMO_FILMS];
+        }
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch { return [...DEMO_FILMS]; }
+    }
+
+    function saveFilms(list) {
+      try {
+        localStorage.setItem(FILMS_KEY, JSON.stringify(list));
+        return true;
+      } catch (err) {
+        addMessage.textContent = "❌ Storage full! Delete some films.";
+        return false;
+      }
+    }
+
+    function loadSettings() {
+      try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        return raw ? JSON.parse(raw) : { name:"Osama Movies", tagline:"Watch free. Download free." };
+      } catch { return { name:"Osama Movies", tagline:"Watch free. Download free." }; }
+    }
+
+    function makeId() {
+      return `film-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    }
+    function safeHttpsUrl(value) {
+      try {
+        const url = new URL(value);
+        return url.protocol === "https:" ? url.href : null;
+      } catch { return null; }
+    }
+
+    function isLoggedIn() {
+      return sessionStorage.getItem(AUTH_KEY) === "1" || localStorage.getItem(REMEMBER_KEY) === "1";
+    }
+
+    function showShell() {
+      loginGate.hidden = true;
+      adminShell.hidden = false;
+      refreshStats();
+      renderAdminList();
+      renderRecent();
+      switchView("dashboard");
+      loadSettingsIntoForm();
+    }
+
+    function showLogin() {
+      loginGate.hidden = false;
+      adminShell.hidden = true;
+    }
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = $("adminPassword").value;
+      if (value === ADMIN_PASSWORD) {
+        sessionStorage.setItem(AUTH_KEY, "1");
+        if (rememberMe.checked) localStorage.setItem(REMEMBER_KEY, "1");
+        loginMessage.textContent = "";
+        loginForm.reset();
+        showShell();
+      } else {
+        loginMessage.textContent = "❌ Incorrect password. Try again.";
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem(AUTH_KEY);
+      localStorage.removeItem(REMEMBER_KEY);
+      showLogin();
+      loginMessage.textContent = "You have been logged out.";
+    });
+
+    function switchView(view) {
+      currentView = view;
+      document.querySelectorAll(".admin-view").forEach(v => v.hidden = true);
+      const target = $(`view-${view}`);
+      if (target) target.hidden = false;
+
+      document.querySelectorAll(".menu-item").forEach(m => {
+        m.classList.toggle("active", m.dataset.view === view);
+      });
+
+      const titles = {
+        dashboard: ["OVERVIEW", "Dashboard"],
+        films:     ["MANAGE", "All Films"],
+        add:       ["CREATE", "Add Film"],
+        messages:  ["INBOX", "User Messages"],
+        comments:  ["COMMENTS", "User Film Comments"],
+        settings:  ["CONFIG", "Settings"]
+      };
+      const [eyebrow, title] = titles[view] || ["ADMIN", "Dashboard"];
+      viewEyebrow.textContent = eyebrow;
+      viewTitle.textContent = title;
+
+      if (view === "dashboard") { refreshStats(); renderRecent(); }
+      if (view === "films") renderAdminList(true);
+      if (view === "messages") renderMessages();
+      if (view === "comments") renderAdminComments();
+    }
+
+    document.querySelectorAll("[data-view]").forEach(el => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        switchView(el.dataset.view);
+      });
+    });
+
+    function refreshStats() {
+      $("statTotal").textContent = films.length;
+      $("statLinks").textContent = films.filter(f => f.videoUrl && !f.isLocal).length;
+      $("statUploads").textContent = films.filter(f => f.isLocal).length;
+      $("statPosters").textContent = films.filter(f => f.poster || f.hasLocalPoster).length;
+    }
+
+    async function renderRecent() {
+      const recent = films.slice(0, 5); 
+      const el = $("recentFilms");
+      el.replaceChildren();
+      if (!recent.length) {
+        el.innerHTML = `<p class="status-message">No films yet.</p>`;
+        return;
+      }
+      for (const film of recent) {
+        const posterSrc = await resolvePoster(film);
+        
+        let typeLabel = film.type === "Episode" ? `📺 S${film.season || 1} E${film.episode || 1}` : "🎬 Movie";
+        
+        const row = document.createElement("div");
+        row.className = "recent-item";
+        row.innerHTML = `
+          <div class="recent-poster">${posterSrc ? `<img src="${posterSrc}" alt="">` : "🎬"}</div>
+          <div class="recent-info">
+            <strong>${escapeHtml(film.title)}</strong>
+            <p>${escapeHtml(film.year || "—")} · ${escapeHtml(film.category || "Other")} · ${typeLabel}</p>
+          </div>
+          <a class="recent-view" href="watch.html?id=${encodeURIComponent(film.id)}" target="_blank">View ↗</a>
+        `;
+        el.appendChild(row);
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || "").replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[c]));
+    }
+
+    async function resolvePoster(film) {
+      if (film.hasLocalPoster) {
+        try {
+          const blob = await getPosterBlob(film.id);
+          if (blob) return URL.createObjectURL(blob);
+        } catch {}
+      }
+      return film.poster || "";
+    }
+
+    posterRadioUrls.forEach(radio => {
+      radio.addEventListener("change", () => {
+        const mode = document.querySelector('input[name="posterSource"]:checked').value;
+        posterUrlGroup.hidden = mode !== "url";
+        posterUploadGroup.hidden = mode !== "upload";
+      });
+    });
+
+    newPosterFile.addEventListener("change", () => {
+      const file = newPosterFile.files[0];
+      if (!file) {
+        selectedPosterFile = null;
+        posterUploadInfo.textContent = "No poster selected.";
+        return;
+      }
+      if (!/image\/(jpeg|png|webp)/.test(file.type)) {
+        addMessage.textContent = "❌ Only JPG, PNG or WEBP images are allowed.";
+        newPosterFile.value = "";
+        selectedPosterFile = null;
+        return;
+      }
+      selectedPosterFile = file;
+      const kb = (file.size / 1024).toFixed(0);
+      posterUploadInfo.textContent = `✅ Selected: ${file.name} (${kb} KB)`;
+      posterPreview.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="preview">`;
+    });
+
+    newPoster.addEventListener("input", async () => {
+      const url = newPoster.value.trim();
+      if (url && safeHttpsUrl(url)) {
+        posterPreview.innerHTML = `<img src="${url}" alt="preview"
+          onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Invalid image'}))">`;
+      } else {
+        posterPreview.innerHTML = `<span>Poster preview</span>`;
+      }
+    });
+
+    radioUrls.forEach(radio => {
+      radio.addEventListener("change", () => {
+        const mode = document.querySelector('input[name="videoSource"]:checked').value;
+        urlGroup.hidden = mode !== "url";
+        uploadGroup.hidden = mode !== "upload";
+      });
+    });
+
+    newVideoFile.addEventListener("change", () => {
+      const file = newVideoFile.files[0];
+      if (!file) {
+        selectedVideoFile = null;
+        uploadInfo.textContent = "No file selected.";
+        return;
+      }
+      if (!/video\/(mp4|webm)/.test(file.type)) {
+        addMessage.textContent = "❌ Only MP4 or WebM videos are allowed.";
+        newVideoFile.value = "";
+        selectedVideoFile = null;
+        return;
+      }
+      selectedVideoFile = file;
+      const mb = (file.size / (1024*1024)).toFixed(1);
+      uploadInfo.textContent = `✅ Selected: ${file.name} (${mb} MB)`;
+    });
+
+    /* ============================================================
+       ✅ TRAILER: radio toggles + file selection
+       ============================================================ */
+    trailerRadioUrls.forEach(radio => {
+      radio.addEventListener("change", () => {
+        const mode = document.querySelector('input[name="trailerSource"]:checked').value;
+        trailerUrlGroup.hidden = mode !== "url";
+        trailerUploadGroup.hidden = mode !== "upload";
+      });
+    });
+
+    newTrailerFile.addEventListener("change", () => {
+      const file = newTrailerFile.files[0];
+      if (!file) {
+        selectedTrailerFile = null;
+        trailerUploadInfo.textContent = "No trailer file selected.";
+        return;
+      }
+      if (!/video\/(mp4|webm)/.test(file.type)) {
+        addMessage.textContent = "❌ Only MP4 or WebM trailer videos are allowed.";
+        newTrailerFile.value = "";
+        selectedTrailerFile = null;
+        return;
+      }
+      selectedTrailerFile = file;
+      const mb = (file.size / (1024*1024)).toFixed(1);
+      trailerUploadInfo.textContent = `✅ Selected: ${file.name} (${mb} MB)`;
+    });
+
+    newCastImage.addEventListener("change", () => {
+      const file = newCastImage.files[0];
+      if (!file) {
+        selectedCastImageFile = null;
+        castImageUploadInfo.textContent = "No image selected.";
+        return;
+      }
+      if (!/image\/(jpeg|png|webp)/.test(file.type)) {
+        addMessage.textContent = "❌ Only JPG, PNG or WEBP images are allowed for actors.";
+        newCastImage.value = "";
+        selectedCastImageFile = null;
+        return;
+      }
+      selectedCastImageFile = file;
+      const kb = (file.size / 1024).toFixed(0);
+      castImageUploadInfo.textContent = `✅ Selected: ${file.name} (${kb} KB)`;
+    });
+
+    /* ============================================================
+       ✅ Flag & Genre highlight toggle
+       ============================================================ */
+    document.querySelectorAll(".flag-item input[type=checkbox], .genre-item input[type=checkbox]").forEach(cb => {
+      cb.addEventListener("change", () => {
+        cb.closest(".flag-item, .genre-item").classList.toggle("checked", cb.checked);
+      });
+    });
+
+    function resetFlags() {
+      [newTrending, newNew].forEach(cb => {
+        cb.checked = false;
+        cb.closest(".flag-item").classList.remove("checked");
+      });
+    }
+
+    function resetGenres() {
+      [newGenreDrama, newGenreComedy, newGenreAction, newGenreAdventure, newGenreHorror, newGenreOther].forEach(cb => {
+        cb.checked = false;
+        cb.closest(".genre-item").classList.remove("checked");
+      });
+    }
+
+    function resetTrailer() {
+      document.querySelector('input[name="trailerSource"][value="none"]').checked = true;
+      trailerUrlGroup.hidden = true;
+      trailerUploadGroup.hidden = true;
+      newTrailer.value = "";
+      newTrailerFile.value = "";
+      selectedTrailerFile = null;
+      trailerUploadInfo.textContent = "No trailer file selected.";
+    }
+
+    function setFlagsFromFilm(film) {
+      newTrending.checked = !!film.trending;
+      newNew.checked = !!film.isNew;
+
+      document.querySelectorAll(".flag-item input[type=checkbox]").forEach(cb => {
+        cb.closest(".flag-item").classList.toggle("checked", cb.checked);
+      });
+    }
+
+    function setGenresFromFilm(film) {
+      const genres = Array.isArray(film.genres) ? film.genres : [];
+      const map = {
+        drama: newGenreDrama,
+        comedy: newGenreComedy,
+        action: newGenreAction,
+        adventure: newGenreAdventure,
+        horror: newGenreHorror,
+        other: newGenreOther
+      };
+      Object.keys(map).forEach(key => {
+        map[key].checked = genres.includes(key);
+        map[key].closest(".genre-item").classList.toggle("checked", map[key].checked);
+      });
+    }
+
+    function setTrailerFromFilm(film) {
+      const t = film.trailerUrl || "";
+      selectedTrailerFile = null;
+      newTrailerFile.value = "";
+      if (!t) {
+        document.querySelector('input[name="trailerSource"][value="none"]').checked = true;
+        trailerUrlGroup.hidden = true;
+        trailerUploadGroup.hidden = true;
+        newTrailer.value = "";
+      } else if (t.startsWith("local:")) {
+        document.querySelector('input[name="trailerSource"][value="upload"]').checked = true;
+        trailerUrlGroup.hidden = true;
+        trailerUploadGroup.hidden = false;
+        newTrailer.value = "";
+        trailerUploadInfo.textContent = "Current trailer is stored locally. Choose new file to replace.";
+      } else {
+        document.querySelector('input[name="trailerSource"][value="url"]').checked = true;
+        trailerUrlGroup.hidden = false;
+        trailerUploadGroup.hidden = true;
+        newTrailer.value = t;
+      }
+    }
+
+    addFilmForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const id = editId.value;
+      const title = newTitle.value.trim();
+      const year = newYear.value.trim();
+      const category = newCategory.value;
+      const type = newType.value;
+      const season = newSeason.value;
+      const episode = newEpisode.value;
+      const cast = newCast.value.trim();
+      const castBio = newCastBio.value.trim();
+      const castImageUrl = newCastImageUrl.value.trim();
+      const posterUrlInput = newPoster.value.trim();
+      const videoUrlInput = newVideo.value.trim();
+      const trailerUrlInput = newTrailer.value.trim();
+      const description = newDescription.value.trim();
+
+      /* ✅ Collect flags */
+      const trending = newTrending.checked;
+      const isNew = newNew.checked;
+
+      /* ✅ Collect genres */
+      const genres = [];
+      if (newGenreDrama.checked) genres.push("drama");
+      if (newGenreComedy.checked) genres.push("comedy");
+      if (newGenreAction.checked) genres.push("action");
+      if (newGenreAdventure.checked) genres.push("adventure");
+      if (newGenreHorror.checked) genres.push("horror");
+      if (newGenreOther.checked) genres.push("other");
+
+      const posterMode = document.querySelector('input[name="posterSource"]:checked').value;
+      const videoMode  = document.querySelector('input[name="videoSource"]:checked').value;
+      const trailerMode = document.querySelector('input[name="trailerSource"]:checked').value;
+
+      if (!title) { addMessage.textContent = "Title is required."; return; }
+
+      let filmId = id || makeId();
+
+      let finalPoster = "";
+      let hasLocalPoster = false;
+
+      if (posterMode === "url") {
+        if (posterUrlInput && !safeHttpsUrl(posterUrlInput)) {
+          addMessage.textContent = "Poster URL must be valid HTTPS.";
+          return;
+        }
+        finalPoster = posterUrlInput ? safeHttpsUrl(posterUrlInput) : "";
+      } else {
+        if (selectedPosterFile) {
+          try {
+            addMessage.textContent = "⏳ Saving poster...";
+            await savePosterBlob(filmId, selectedPosterFile);
+            hasLocalPoster = true;
+            finalPoster = "";
+          } catch (err) {
+            addMessage.textContent = "❌ Failed to save poster.";
+            return;
+          }
+        } else if (id) {
+          const existing = films.find(f => f.id === id);
+          if (existing?.hasLocalPoster) {
+            hasLocalPoster = true;
+            finalPoster = existing.poster || "";
+          } else {
+            finalPoster = existing?.poster || "";
+          }
+        }
+      }
+
+      let finalVideoUrl = "";
+      let storedLocal = false;
+
+      if (videoMode === "url") {
+        if (videoUrlInput && !safeHttpsUrl(videoUrlInput)) {
+          addMessage.textContent = "Video URL must be valid HTTPS.";
+          return;
+        }
+        finalVideoUrl = videoUrlInput ? safeHttpsUrl(videoUrlInput) : "";
+      } else {
+        if (selectedVideoFile) {
+          try {
+            addMessage.textContent = "⏳ Saving video...";
+            await saveVideoBlob(filmId, selectedVideoFile);
+            storedLocal = true;
+            finalVideoUrl = `local:${filmId}`;
+          } catch (err) {
+            addMessage.textContent = "❌ Failed to save video.";
+            return;
+          }
+        } else if (id) {
+          const existing = films.find(f => f.id === id);
+          if (existing?.videoUrl?.startsWith("local:")) {
+            finalVideoUrl = existing.videoUrl;
+            storedLocal = true;
+          }
+        }
+      }
+
+      /* ============================================================
+         ✅ TRAILER: resolve URL / local blob
+         ============================================================ */
+      let finalTrailerUrl = "";
+      if (trailerMode === "none") {
+        finalTrailerUrl = "";
+      } else if (trailerMode === "url") {
+        if (trailerUrlInput && !safeHttpsUrl(trailerUrlInput)) {
+          addMessage.textContent = "Trailer URL must be valid HTTPS.";
+          return;
+        }
+        finalTrailerUrl = trailerUrlInput ? safeHttpsUrl(trailerUrlInput) : "";
+      } else { // upload
+        if (selectedTrailerFile) {
+          try {
+            addMessage.textContent = "⏳ Saving trailer...";
+            const trailerId = `trailer-${filmId}`;
+            await savePosterBlob(trailerId, selectedTrailerFile); // reuse blob store
+            finalTrailerUrl = `local:${trailerId}`;
+          } catch (err) {
+            addMessage.textContent = "❌ Failed to save trailer.";
+            return;
+          }
+        } else if (id) {
+          const existing = films.find(f => f.id === id);
+          if (existing?.trailerUrl?.startsWith("local:")) {
+            finalTrailerUrl = existing.trailerUrl;
+          } else {
+            finalTrailerUrl = existing?.trailerUrl || "";
+          }
+        }
+      }
+
+      // Actor Image Handling
+      let actorImageData = castImageUrl;
+      if (selectedCastImageFile) {
+        try {
+           addMessage.textContent = "⏳ Saving actor image...";
+           const actorImgId = `actor-${filmId}`;
+           await savePosterBlob(actorImgId, selectedCastImageFile); 
+           actorImageData = `local:${actorImgId}`; 
+        } catch (err) {
+           addMessage.textContent = "❌ Failed to save actor image.";
+           return;
+        }
+      } else if (id) {
+        const existing = films.find(f => f.id === id);
+        if (existing && existing.castImage && !castImageUrl) {
+           actorImageData = existing.castImage; 
+        }
+      }
+
+      const filmData = { 
+        title, year, category, type, 
+        season: type === "Episode" ? season : "",
+        episode: type === "Episode" ? episode : "",
+        poster: finalPoster,
+        trailerUrl: finalTrailerUrl,
+        description, 
+        cast,
+        castBio,
+        castImage: actorImageData, 
+        videoUrl: finalVideoUrl, 
+        isLocal: storedLocal, 
+        hasLocalPoster,
+        /* ✅ FLAGS & GENRES */
+        trending,
+        isNew,
+        genres
+      };
+
+      if (id) {
+        const idx = films.findIndex(f => f.id === id);
+        if (idx === -1) { addMessage.textContent = "Film not found."; return; }
+        films[idx] = { ...films[idx], ...filmData };
+        if (!saveFilms(films)) return;
+        addMessage.textContent = `✏️ "${title}" updated.`;
+        resetForm();
+      } else {
+        const dup = films.some(f => f.title.toLowerCase() === title.toLowerCase());
+        if (dup) { addMessage.textContent = "This film already exists."; return; }
+        
+        films.unshift({ id: filmId, ...filmData });
+        
+        if (!saveFilms(films)) { films.shift(); return; }
+        addMessage.textContent = `✅ "${title}" added to the top!`;
+        addFilmForm.reset();
+        selectedVideoFile = null;
+        selectedPosterFile = null;
+        selectedCastImageFile = null;
+        selectedTrailerFile = null;
+        uploadInfo.textContent = "No file selected.";
+        posterUploadInfo.textContent = "No poster selected.";
+        castImageUploadInfo.textContent = "No image selected.";
+        posterPreview.innerHTML = `<span>Poster preview</span>`;
+        resetFlags();
+        resetGenres();
+        resetTrailer();
+        toggleEpisodeFields();
+      }
+
+      refreshStats();
+      renderAdminList(true);
+      renderRecent();
+    });
+
+    function resetForm() {
+      addFilmForm.reset();
+      editId.value = "";
+      selectedVideoFile = null;
+      selectedPosterFile = null;
+      selectedCastImageFile = null;
+      selectedTrailerFile = null;
+      uploadInfo.textContent = "No file selected.";
+      posterUploadInfo.textContent = "No poster selected.";
+      castImageUploadInfo.textContent = "No image selected.";
+      trailerUploadInfo.textContent = "No trailer file selected.";
+      posterPreview.innerHTML = `<span>Poster preview</span>`;
+      document.getElementById("currentCastImagePreview").style.display = "none"; 
+      formHeading.textContent = "➕ Add a New Film";
+      submitBtn.textContent = "✅ Publish Film";
+      cancelEditBtn.hidden = true;
+      urlGroup.hidden = false;
+      uploadGroup.hidden = true;
+      posterUrlGroup.hidden = false;
+      posterUploadGroup.hidden = true;
+      resetFlags();
+      resetGenres();
+      resetTrailer();
+      toggleEpisodeFields(); 
+    }
+
+    cancelEditBtn.addEventListener("click", () => {
+      resetForm();
+      addMessage.textContent = "";
+      switchView("films");
+    });
+
+    /* Helper: build genre pills HTML */
+    function buildGenrePills(genres) {
+      if (!Array.isArray(genres) || !genres.length) return "";
+      return `<div class="genre-pills">${genres.map(g => {
+        const label = g.charAt(0).toUpperCase() + g.slice(1);
+        return `<span class="genre-pill ${g}">${label}</span>`;
+      }).join("")}</div>`;
+    }
+
+    async function renderAdminList(reset = true) {
+      adminFilmList.replaceChildren();
+
+      if (!films.length) {
+        manageMessage.textContent = "No films. Add your first film!";
+        document.getElementById("adminLoadMoreWrap").hidden = true;
+        return;
+      }
+
+      const filterText = (filmSearchInput.value || "").toLowerCase();
+      const fullList = filterText
+        ? films.filter(f => f.title.toLowerCase().includes(filterText))
+        : films;
+
+      if (reset) {
+        adminPage = 1;
+        adminList = fullList;
+      }
+
+      const start = (adminPage - 1) * ADMIN_PER_PAGE;
+      const end = start + ADMIN_PER_PAGE;
+      const pageFilms = adminList.slice(start, end);
+
+      manageMessage.textContent = `${Math.min(end, adminList.length)} of ${adminList.length} film(s) shown.`;
+
+      for (const film of pageFilms) {
+        const posterSrc = await resolvePoster(film);
+        const row = document.createElement("div");
+        row.className = "film-row";
+
+        const thumb = document.createElement("div");
+        thumb.className = "film-thumb";
+        if (posterSrc) {
+          const img = document.createElement("img");
+          img.src = posterSrc;
+          img.alt = film.title;
+          img.onerror = () => { thumb.textContent = "🎬"; };
+          thumb.appendChild(img);
+        } else thumb.textContent = "🎬";
+
+        const info = document.createElement("div");
+        info.className = "film-info";
+        
+        const videoLabel = film.videoUrl
+          ? (film.isLocal ? "📤 uploaded" : "🔗 link") : "⚠ none";
+        const posterLabel = film.hasLocalPoster ? "🖼️ uploaded" : (film.poster ? "🔗 poster link" : "⚠ no poster");
+        
+        let typeLabel = film.type === "Episode" 
+          ? `📺 S${film.season || 1} E${film.episode || 1}` 
+          : "🎬 Movie";
+
+        /* ✅ Show flags as small tags */
+        const flagTags = [];
+        if (film.trending) flagTags.push("🔥 Trending");
+        if (film.isNew) flagTags.push("🆕 New");
+        const flagLine = flagTags.length
+          ? `<p style="font-size:0.75rem;color:var(--cyan);margin-top:2px;">${flagTags.join(" · ")}</p>`
+          : "";
+
+        /* ✅ Genre pills */
+        const genrePills = buildGenrePills(film.genres);
+
+        /* ✅ Trailer badge */
+        const trailerBadge = film.trailerUrl
+          ? `<span class="trailer-badge">🎬 Trailer available</span>`
+          : "";
+
+        info.innerHTML = `
+          <strong>${escapeHtml(film.title)}</strong>
+          <p>${escapeHtml(film.year || "—")} · ${escapeHtml(film.category || "Other")} · ${typeLabel}</p>
+          <p style="font-size:0.75rem; opacity:0.7;">${videoLabel} · ${posterLabel}</p>
+          ${flagLine}
+          ${genrePills}
+          ${trailerBadge}
+          ${film.description ? `<p class="film-desc">${escapeHtml(film.description)}</p>` : ""}
+        `;
+
+        const actions = document.createElement("div");
+        actions.className = "film-actions";
+
+        const editBtn = document.createElement("button");
+        editBtn.className = "icon-btn edit";
+        editBtn.textContent = "✏️";
+        editBtn.title = "Edit";
+        editBtn.onclick = () => startEdit(film.id);
+
+        const viewBtn = document.createElement("a");
+        viewBtn.className = "icon-btn view";
+        viewBtn.href = `watch.html?id=${encodeURIComponent(film.id)}`;
+        viewBtn.target = "_blank";
+        viewBtn.rel = "noopener";
+        viewBtn.textContent = "▶";
+        viewBtn.title = "View";
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "icon-btn delete";
+        delBtn.textContent = "🗑";
+        delBtn.title = "Delete";
+        delBtn.onclick = () => deleteFilm(film.id, film.title);
+
+        actions.append(editBtn, viewBtn, delBtn);
+        row.append(thumb, info, actions);
+        adminFilmList.appendChild(row);
+      }
+
+      const loadMoreWrap = document.getElementById("adminLoadMoreWrap");
+      loadMoreWrap.hidden = end >= adminList.length;
+    }
+
+    function adminLoadMore() {
+      adminPage++;
+      renderAdminList(false);
+    }
+
+    document.getElementById("adminLoadMoreBtn").addEventListener("click", adminLoadMore);
+
+    filmSearchInput.addEventListener("input", () => renderAdminList(true));
+
+    async function startEdit(id) {
+      const film = films.find(f => f.id === id);
+      if (!film) return;
+
+      editId.value = film.id;
+      newTitle.value = film.title || "";
+      newYear.value = film.year || "";
+      newCategory.value = film.category || "Other";
+      newType.value = film.type || "Movie";
+      newCast.value = film.cast || "";
+      newCastBio.value = film.castBio || "";
+      
+      /* ✅ Load flags, genres & trailer */
+      setFlagsFromFilm(film);
+      setGenresFromFilm(film);
+      setTrailerFromFilm(film);
+
+      // Reset file inputs
+      newCastImage.value = "";
+      selectedCastImageFile = null;
+      castImageUploadInfo.textContent = "Leave empty to keep current image.";
+      
+      // If there's an existing actor image url (not local), fill it
+      if (film.castImage && !film.castImage.startsWith("local:")) {
+        newCastImageUrl.value = film.castImage;
+      } else {
+        newCastImageUrl.value = "";
+      }
+
+      // ✅ Kwerekana Ifoto y'Umukinnyi ihari (Actor Image Preview)
+      const castPreviewBox = document.getElementById("currentCastImagePreview");
+      const castImgTag = document.getElementById("castImgPreviewTag");
+      
+      if (film.castImage) {
+        let imgSrc = film.castImage;
+        if (film.castImage.startsWith("local:")) {
+           const imgId = film.castImage.replace("local:", "");
+           const blob = await getPosterBlob(imgId);
+           if (blob) imgSrc = URL.createObjectURL(blob);
+        }
+        
+        if (imgSrc) {
+           castImgTag.src = imgSrc;
+           castPreviewBox.style.display = "flex"; 
+        } else {
+           castPreviewBox.style.display = "none";
+        }
+      } else {
+        castPreviewBox.style.display = "none"; 
+      }
+
+      if (film.type === "Episode") {
+        newSeason.value = film.season || "";
+        newEpisode.value = film.episode || "";
+      } else {
+        newSeason.value = "";
+        newEpisode.value = "";
+      }
+      toggleEpisodeFields();
+
+      newDescription.value = film.description || "";
+
+      if (film.hasLocalPoster) {
+        document.querySelector('input[name="posterSource"][value="upload"]').checked = true;
+        posterUrlGroup.hidden = true;
+        posterUploadGroup.hidden = false;
+        newPoster.value = "";
+        posterUploadInfo.textContent = "Current poster is stored locally. Choose new file to replace.";
+      } else {
+        document.querySelector('input[name="posterSource"][value="url"]').checked = true;
+        posterUrlGroup.hidden = false;
+        posterUploadGroup.hidden = true;
+        newPoster.value = film.poster || "";
+      }
+      const posterSrc = await resolvePoster(film);
+      posterPreview.innerHTML = posterSrc
+        ? `<img src="${posterSrc}" alt="preview">`
+        : `<span>Poster preview</span>`;
+
+      if (film.isLocal) {
+        document.querySelector('input[name="videoSource"][value="upload"]').checked = true;
+        urlGroup.hidden = true;
+        uploadGroup.hidden = false;
+        newVideo.value = "";
+        uploadInfo.textContent = "Current video is local. Choose new file to replace.";
+      } else {
+        document.querySelector('input[name="videoSource"][value="url"]').checked = true;
+        urlGroup.hidden = false;
+        uploadGroup.hidden = true;
+        newVideo.value = film.videoUrl || "";
+      }
+
+      formHeading.textContent = `✏️ Edit: ${film.title}`;
+      submitBtn.textContent = "💾 Save Changes";
+      cancelEditBtn.hidden = false;
+      switchView("add");
+      addMessage.textContent = "";
+      newTitle.focus();
+    }
+
+    async function deleteFilm(id, title) {
+      if (!confirm(`Delete "${title}"?`)) return;
+      try { await deleteVideoBlob(id); } catch {}
+      try { await deletePosterBlob(id); } catch {}
+      try { await deletePosterBlob(`actor-${id}`); } catch {}
+      try { await deletePosterBlob(`trailer-${id}`); } catch {} // delete trailer blob
+      films = films.filter(f => f.id !== id);
+      saveFilms(films);
+      refreshStats();
+      renderAdminList(true);
+      renderRecent();
+      addMessage.textContent = `🗑 "${title}" deleted.`;
+      if (editId.value === id) resetForm();
+    }
+
+    resetDemoBtn.addEventListener("click", async () => {
+      if (!confirm("Reset to demo films? Changes will be lost.")) return;
+      try {
+        const vids = await listVideoIds();
+        for (const v of vids) await deleteVideoBlob(v);
+        const posters = await listPosterIds();
+        for (const p of posters) await deletePosterBlob(p);
+      } catch {}
+      films = [...DEMO_FILMS];
+      saveFilms(films);
+      refreshStats(); renderAdminList(true); renderRecent(); resetForm();
+      addMessage.textContent = "↻ Library reset.";
+    });
+
+    clearAllBtn.addEventListener("click", async () => {
+      if (!confirm("Delete ALL films? This cannot be undone.")) return;
+      try {
+        const vids = await listVideoIds();
+        for (const v of vids) await deleteVideoBlob(v);
+        const posters = await listPosterIds();
+        for (const p of posters) await deletePosterBlob(p);
+      } catch {}
+      films = [];
+      saveFilms(films);
+      refreshStats(); renderAdminList(true); renderRecent(); resetForm();
+      addMessage.textContent = "🗑 All films deleted.";
+    });
+
+    function loadSettingsIntoForm() {
+      const s = loadSettings();
+      siteName.value = s.name || "";
+      siteTagline.value = s.tagline || "";
+    }
+
+    saveSettingsBtn.addEventListener("click", () => {
+      const s = { name: siteName.value.trim(), tagline: siteTagline.value.trim() };
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+      settingsMessage.textContent = "✅ Settings saved.";
+    });
+
+    /* ============================================================
+       ✅ MESSAGES (INBOX) LOGIC
+       ============================================================ */
+    function loadMessages() {
+      try {
+        const raw = localStorage.getItem(MESSAGES_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveMessages(msgs) {
+      try {
+        localStorage.setItem(MESSAGES_KEY, JSON.stringify(msgs));
+        return true;
+      } catch (err) {
+        alert("Storage is full. Cannot save messages.");
+        return false;
+      }
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "Unknown date";
+      const d = new Date(dateStr);
+      if (isNaN(d)) return dateStr;
+      return d.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderMessages() {
+      const listEl = document.getElementById("messageList");
+      const searchEl = document.getElementById("msgSearchInput");
+      const searchText = searchEl ? searchEl.value.trim().toLowerCase() : "";
+      
+      let msgs = loadMessages().filter(m => !m.replyToCommentId);
+
+      msgs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      if (searchText) {
+        msgs = msgs.filter(m => 
+          (m.name && m.name.toLowerCase().includes(searchText)) ||
+          (m.email && m.email.toLowerCase().includes(searchText)) ||
+          (m.message && m.message.toLowerCase().includes(searchText))
+        );
+      }
+
+      listEl.replaceChildren();
+
+      if (!msgs.length) {
+        listEl.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: var(--muted); background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius-md);">
+            <h3 style="margin-bottom: 10px;">📭 No Messages Found</h3>
+            <p>${searchText ? "No messages match your search." : "You have no messages yet."}</p>
+          </div>
+        `;
+        return;
+      }
+
+      msgs.forEach(msg => {
+        const isReplied = msg.status === "replied";
+        const statusClass = isReplied ? "status-replied" : "status-pending";
+        const statusText = isReplied ? "Replied" : "Pending";
+
+        const card = document.createElement("div");
+        card.className = "message-card";
+        card.innerHTML = `
+          <span class="status-badge ${statusClass}">${statusText}</span>
+          
+          <div class="msg-header">
+            <div class="msg-sender">👤 ${escapeHtml(msg.name)}</div>
+            <div class="msg-email">✉️ ${escapeHtml(msg.email)}</div>
+            <div class="msg-date">🕐 ${formatDate(msg.date)}</div>
+          </div>
+
+          <div class="msg-content">
+            ${escapeHtml(msg.message).replace(/\n/g, '<br>')}
+          </div>
+
+          <div class="reply-section">
+            <label class="reply-label">Reply to User</label>
+            <textarea class="reply-textarea" id="reply-${msg.id}" placeholder="Type your reply here...">${escapeHtml(msg.reply || "")}</textarea>
+            
+            <div class="reply-actions">
+              ${isReplied 
+                ? `<button class="btn-update" onclick="updateReply('${msg.id}')">💾 Update Response</button>`
+                : `<button class="btn-reply" onclick="sendReply('${msg.id}')">📤 Send Response</button>`
+              }
+              <button class="delete-button" style="padding: 8px 16px; font-size: 0.85rem;" onclick="deleteMessage('${msg.id}')">🗑 Delete Message</button>
+            </div>
+          </div>
+        `;
+
+        listEl.appendChild(card);
+      });
+    }
+
+    function sendReply(id) {
+      const replyText = document.getElementById(`reply-${id}`).value.trim();
+      if (!replyText) {
+        alert("Please write a reply before sending.");
+        return;
+      }
+
+      let msgs = loadMessages();
+      const idx = msgs.findIndex(m => m.id === id);
+      
+      if (idx !== -1) {
+        msgs[idx].reply = replyText;
+        msgs[idx].status = "replied";
+        msgs[idx].repliedAt = new Date().toISOString();
+        
+        if (saveMessages(msgs)) {
+          alert("✅ Reply sent successfully!");
+          renderMessages();
+        }
+      }
+    }
+
+    function updateReply(id) {
+      const replyText = document.getElementById(`reply-${id}`).value.trim();
+      if (!replyText) {
+        alert("Please write a reply before updating.");
+        return;
+      }
+
+      let msgs = loadMessages();
+      const idx = msgs.findIndex(m => m.id === id);
+      
+      if (idx !== -1) {
+        msgs[idx].reply = replyText;
+        msgs[idx].repliedAt = new Date().toISOString();
+        
+        if (saveMessages(msgs)) {
+          alert("✏️ Reply updated successfully!");
+          renderMessages();
+        }
+      }
+    }
+
+    function deleteMessage(id) {
+      if (!confirm("Are you sure you want to delete this message? This cannot be undone.")) return;
+      
+      let msgs = loadMessages();
+      msgs = msgs.filter(m => m.id !== id);
+      
+      if (saveMessages(msgs)) {
+        renderMessages();
+      }
+    }
+
+    /* ============================================================
+       FILM COMMENTS: ADMIN REPLIES
+       Comments are created by watch.html in osama_film_comments.
+       Replies are stored in MESSAGES_KEY so watch.html can display
+       them by matching replyToCommentId with the original comment id.
+       ============================================================ */
+    const FILM_COMMENTS_KEY = "osama_film_comments";
+    const commentSearchInput = document.getElementById("commentSearchInput");
+
+    function loadFilmComments() {
+      try {
+        const raw = localStorage.getItem(FILM_COMMENTS_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        console.error("Could not read film comments:", error);
+        return [];
+      }
+    }
+
+    function getFilmTitle(filmId) {
+      const film = films.find(item => String(item.id) === String(filmId));
+      return film ? film.title : "Film no longer available";
+    }
+
+    function getCommentReply(commentId) {
+      return loadMessages().find(message =>
+        String(message.replyToCommentId || "") === String(commentId)
+      ) || null;
+    }
+
+    function renderAdminComments() {
+      const list = document.getElementById("adminCommentList");
+      if (!list) return;
+
+      const searchText = commentSearchInput
+        ? commentSearchInput.value.trim().toLowerCase()
+        : "";
+
+      let comments = loadFilmComments();
+      comments.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+      if (searchText) {
+        comments = comments.filter(comment => {
+          const filmTitle = getFilmTitle(comment.filmId).toLowerCase();
+          return String(comment.name || "Anonymous").toLowerCase().includes(searchText) ||
+            String(comment.email || "").toLowerCase().includes(searchText) ||
+            String(comment.message || "").toLowerCase().includes(searchText) ||
+            filmTitle.includes(searchText);
+        });
+      }
+
+      list.replaceChildren();
+
+      if (!comments.length) {
+        const empty = document.createElement("div");
+        empty.style.cssText = "text-align:center;padding:40px;color:var(--muted);background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius-md);";
+        empty.innerHTML = `<h3 style="margin-bottom:10px;">💬 No Comments Found</h3><p>${searchText ? "No comments match your search." : "No film comments have been posted yet."}</p>`;
+        list.appendChild(empty);
+        return;
+      }
+
+      comments.forEach(comment => {
+        const existingReply = getCommentReply(comment.id);
+        const card = document.createElement("article");
+        card.className = "message-card";
+
+        const status = document.createElement("span");
+        status.className = `status-badge ${existingReply && existingReply.reply ? "status-replied" : "status-pending"}`;
+        status.textContent = existingReply && existingReply.reply ? "Replied" : "Pending";
+
+        const header = document.createElement("div");
+        header.className = "msg-header";
+        const sender = document.createElement("div");
+        sender.className = "msg-sender";
+        sender.textContent = `👤 ${comment.name || "Anonymous"}`;
+        const email = document.createElement("div");
+        email.className = "msg-email";
+        email.textContent = comment.email ? `✉️ ${comment.email}` : "✉️ No email provided";
+        const film = document.createElement("div");
+        film.className = "msg-email";
+        film.textContent = `🎬 ${getFilmTitle(comment.filmId)}`;
+        const date = document.createElement("div");
+        date.className = "msg-date";
+        date.textContent = `🕐 ${formatDate(comment.date)}`;
+        header.append(sender, email, film, date);
+
+        const content = document.createElement("div");
+        content.className = "msg-content";
+        content.textContent = comment.message || "";
+
+        const replySection = document.createElement("div");
+        replySection.className = "reply-section";
+        const label = document.createElement("label");
+        label.className = "reply-label";
+        label.textContent = "Reply to this comment";
+
+        const textarea = document.createElement("textarea");
+        textarea.className = "reply-textarea";
+        textarea.placeholder = "Write your admin reply...";
+        textarea.value = existingReply ? (existingReply.reply || "") : "";
+
+        const actions = document.createElement("div");
+        actions.className = "reply-actions";
+        const replyButton = document.createElement("button");
+        replyButton.type = "button";
+        replyButton.className = existingReply ? "btn-update" : "btn-reply";
+        replyButton.textContent = existingReply ? "💾 Update Reply" : "📤 Send Reply";
+        replyButton.addEventListener("click", () => saveCommentReply(comment, textarea.value));
+
+        actions.appendChild(replyButton);
+        replySection.append(label, textarea, actions);
+        card.append(status, header, content, replySection);
+        list.appendChild(card);
+      });
+    }
+
+    function saveCommentReply(comment, replyText) {
+      const cleanReply = String(replyText || "").trim();
+      if (!cleanReply) {
+        alert("Please write a reply before sending.");
+        return;
+      }
+
+      const messages = loadMessages();
+      const now = new Date().toISOString();
+      const existingIndex = messages.findIndex(message =>
+        String(message.replyToCommentId || "") === String(comment.id)
+      );
+
+      const replyRecord = {
+        id: existingIndex >= 0 ? messages[existingIndex].id : `comment-reply-${comment.id}`,
+        replyToCommentId: comment.id,
+        filmId: comment.filmId,
+        name: comment.name || "Anonymous",
+        email: comment.email || "",
+        message: comment.message || "",
+        date: comment.date || now,
+        reply: cleanReply,
+        status: "replied",
+        repliedAt: now
+      };
+
+      if (existingIndex >= 0) messages[existingIndex] = replyRecord;
+      else messages.push(replyRecord);
+
+      if (saveMessages(messages)) {
+        alert("✅ Admin reply saved. It will appear below the comment on the film page.");
+        renderAdminComments();
+      }
+    }
+
+    if (commentSearchInput) {
+      commentSearchInput.addEventListener("input", renderAdminComments);
+    }
+
+    const msgSearchInput = document.getElementById("msgSearchInput");
+    if (msgSearchInput) {
+      msgSearchInput.addEventListener("input", renderMessages);
+    }
+
+    /* ============================================================
+       INIT
+       ============================================================ */
+    document.getElementById("headerDate").textContent =
+      new Date().toLocaleDateString(undefined, { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+
+    document.getElementById("yearNow").textContent = new Date().getFullYear();
+
+    if (!localStorage.getItem(MESSAGES_KEY)) {
+       const demoMsgs = [
+         { id: "msg-001", name: "John Doe", email: "john@example.com", message: "Hello, I love your site! Can I download movies in HD?", date: new Date().toISOString(), status: "pending", reply: "" },
+         { id: "msg-002", name: "Alice Smith", email: "alice@example.com", message: "I have a problem with the video player.", date: new Date(Date.now() - 86400000).toISOString(), status: "replied", reply: "Hi Alice, please try updating your browser." }
+       ];
+       localStorage.setItem(MESSAGES_KEY, JSON.stringify(demoMsgs));
+    }
+
+    if (isLoggedIn()) showShell(); else showLogin();
+  </script>
+</body>
+</html>
